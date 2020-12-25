@@ -1,6 +1,6 @@
 ---
 title: 避开Windows API执行Shellcode
-date: 2020-12-25 13:22:39
+date: 2020-9-25 13:22:39
 tags:
 ---
 
@@ -58,3 +58,5 @@ int main()
 ### 说明
 
 这种Shellcode的加载方式可以在编译时将Shellcode完全分配到`.text`段。此外将包含Shellcode的数组转换为函数指针并调用，从而避免了调用`CreateThread`之类的常用于跳转至Shellcode的Windows API。
+
+这种方式可以有效避开一些杀毒软件的查杀。
