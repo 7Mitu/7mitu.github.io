@@ -1,7 +1,10 @@
 ---
 title: 避开Windows API执行Shellcode
 date: 2020-11-25 13:22:39
-tags: Shellcode,后渗透,免杀
+tags: 
+- Shellcode
+- 后渗透
+- 免杀
 ---
 
 
