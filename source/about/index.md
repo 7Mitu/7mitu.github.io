@@ -3,6 +3,11 @@ title: about
 date: 2020-12-24 11:12:48
 ---
 
+``` python
+Name = '忘返'
+Profession = '搞安全的'
+Description = '什么技能都点了一下…………但是都没点满。'
+```
 
 考虑再三还是决定把博客迁移到Github，自己用VPS建博客的话，维护太消耗精力了。
 而且Github Pages还是永久免费的，备份也容易。
