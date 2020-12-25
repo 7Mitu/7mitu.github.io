@@ -31,14 +31,16 @@ theme_color: '#2d4356'
 menu:
   - page: 归档
     directory: archives/
-  - page: 分类
-    directory: categories/
+#  - page: 分类
+#    directory: categories/
   - page: 标签
     directory: tags/
   - page: 关于
     directory: about/
-  - page: rss
-    directory: atom.xml
+  - page: 友链
+    directory: links/
+#  - page: rss
+#    directory: atom.xml
 
 icons:
   date: fa fa-calendar
