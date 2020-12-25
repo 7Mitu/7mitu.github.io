@@ -3,7 +3,7 @@ description: "城中楼阁，几经风霜；<br>天涯游子，一梦黄粱。"
 
 # comment system
 valine: ## https://valine.js.org
-  enable: true ## If you want to use Valine comment system, please set the value to true.
+  enable: false ## If you want to use Valine comment system, please set the value to true.
   appid:  ## Your LeanCloud application App ID, e.g. pRBBL2JR4N7kLEGojrF0MsSs-gzGzoHsz
   appkey: ## Your LeanCloud application App Key, e.g. tjczHpDfhjYDSYddzymYK1JJ
   lang: zh-cn ## Language, e.g. zh-cn, en
