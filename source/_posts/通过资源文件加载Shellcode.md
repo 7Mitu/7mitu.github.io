@@ -1,7 +1,7 @@
 ---
 title: 通过资源文件加载Shellcode
 date: 2020-12-25 13:51:10
-tags:
+tags: Shellcode,后渗透
 ---
 
 
