@@ -6,7 +6,7 @@ date: 2020-12-24 11:12:48
 ``` python
 ID = '忘返'
 Profession = '搞安全的'
-Email_Address = 'mtwf.one@gmail.com'
+Email_Address = 'mtwf@foxmail.com'
 Description = '什么技能都点了一下…………但是都没点满。'
 ```
 
