@@ -14,7 +14,11 @@
       
         <tags>
             
+            <tag> 资料 </tag>
+            
             <tag> 工具 </tag>
+            
+            <tag> CheckList </tag>
             
         </tags>
       
@@ -73,7 +77,7 @@
       
         <tags>
             
-            <tag> ShellCode </tag>
+            <tag> Shellcode </tag>
             
             <tag> 持久化 </tag>
             
