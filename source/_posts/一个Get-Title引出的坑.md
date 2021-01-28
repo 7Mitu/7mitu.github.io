@@ -6,8 +6,8 @@ tags:
 - 爬虫
 - 工具
 ---
-
 # 0x00 引言
+
 最近要整理大量的网页资料，刚好完善一下以前写的get-title脚本。
 目标：获取所有URL对应网页的Title，并以友好的格式输出至文件。
 此脚本原来是渗透的时候搞网段用的，把扫出来的Web的title列举出来，从而对自己的目标有个大致的概念。但是早先的版本只能说是可以将就着用，往往输出的格式乱七八糟，刚好借着这次机会重写一下。也顺便将其从python2过渡到python3。
@@ -16,7 +16,7 @@ tags:
 
 早期版本：
 
-``` python
+```python
 import requests
 from bs4 import BeautifulSoup
 from threading import Thread
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
 重写极简版本：
 
-``` python
+```python
 import requests
 from bs4 import BeautifulSoup
 
@@ -129,7 +129,7 @@ print(soup.title.string)
 
 最终版本：
 
-``` python
+```python
 import requests
 from bs4 import BeautifulSoup
 import threadpool
@@ -191,8 +191,6 @@ if __name__ == '__main__':
     pool.wait()
 ```
 
-
-
 简而言之，早期的版本与当前版本区别如下：
 
 - 利用多线程的方式有所区别
@@ -207,9 +205,10 @@ if __name__ == '__main__':
 早期的版本实际上是直接对其他大佬的代码做的修改，仅仅在使用习惯上做了一些调整，代码逻辑也不甚了解，于是一不做二不休，从零开始重写脚本。
 
 ## 坑1 微信公众号文章的Title
+
 最早用极简版测试的时候，发现所有的微信公众号都无法用bs4直接获取到title，于是乎瞅了一眼公众号的源码，title竟然是这个屌样子的……
 
-``` html
+```html
 <script>
     …………
     var hd_head_img = "http://xxxxxxxxxx/"||"";
@@ -227,7 +226,7 @@ if __name__ == '__main__':
 
 直接正则一把梭：
 
-``` python
+```python
 if 'mp.weixin.qq.com' in url:
     rule=r"var msg_title = '.*'"
     title=re.search(r"'.*'",re.search(rule,response).group()).group().strip('\'')
@@ -235,9 +234,9 @@ if 'mp.weixin.qq.com' in url:
 
 ## 坑2 没有Title
 
-要爬的链接，有的是文档，没有Title，于是引发bs4报错，于是引发脚本崩溃，这……
+有些链接是文件的下载链接，没有Title，于是引发bs4报错，于是引发脚本崩溃，这……
 
-``` python
+```python
 soup=BeautifulSoup(response,'html.parser')
 if soup.title:
     title=str(soup.title.string)
@@ -246,9 +245,10 @@ else :
 ```
 
 ## 坑3 User-Agent被拦截
+
 有的防护设备居然会丧心病狂的拦截requests的UA……
 
-``` python
+```python
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'}
 try:
     res=requests.get(url,headers=headers,proxies=proxies,timeout=timeout)
@@ -257,15 +257,17 @@ except :
 ```
 
 ## 坑4 编码问题
+
 这其实是个挺头疼的问题，之前第一版的脚本就一直没有解决。
 以前读取`response`的内容，一般是通过两个方式，`res.text()`或者`res.content()`。但是这样有一个很头疼的问题，就是每个网站的编码方式不一样，尤其中文网站，用`GBK`的和用`UTF-8`的网站几乎一样多。于是输出的时候就是各种乱七八糟的乱码，而一个文件又不可能同时有两种编码格式。
 经过艰(qing)难(jiao)研(da)究(lao)，最终确定了两种解决方案：
+
 1. 通过`chardet`确定编码格式，最终统一成同一种编码方式；
 2. 读取网页`response`头中的编码格式，然后decode；
 
 最终我采用的是方案2：
 
-``` python
+```python
 response = res.content.decode(res.apparent_encoding)
 ```
 
@@ -273,7 +275,7 @@ response = res.content.decode(res.apparent_encoding)
 
 这类网站往往都是默认采用`UTF-8`格式编码，所以我们直接用`res.text`就可以了：
 
-``` python
+```python
 if res.apparent_encoding != None:
     response=res.content.decode(res.apparent_encoding)
 else:
@@ -287,12 +289,14 @@ else:
 ## 仍然存在的缺陷
 
 1. 遭遇某些编码格式的网站时，仍然会报错（如`cp1254`等）；
-``` python
+
+```python
   File ".\get-title.py", line 28, in get_title
     response=res.content.decode(res.apparent_encoding)
   File "C:\Environment\Python38\lib\encodings\cp1254.py", line 15, in decode
     return codecs.charmap_decode(input,errors,decoding_table)
 ```
+
 2. 对于一些比较常见的反爬虫手段，无能为力（爬到的title是`Just a moment...`，说明在自动验证是否真人访问）
 
 ## 可以改进的方向
