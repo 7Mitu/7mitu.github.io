@@ -304,3 +304,94 @@ else:
 1. 增加代理池模式，用以解决部分网站TimeOut的问题；
 2. 更加友好的结果呈现，可输出至Excel表格中，最好舍弃csv采用xlsx，因为获取的title千奇百怪，可能破坏csv的格式；
 3. 自动识别一些常见的中间件，如Weblogic等等；
+
+
+# 0x04 2021.2.26更新
+
+``` python
+import requests
+from bs4 import BeautifulSoup
+import threadpool
+import re
+from signal import signal, SIGINT
+from sys import exit
+from sys import argv
+
+use_proxy=True
+proxies={'http':'http://127.0.0.1:10809','https':'http://127.0.0.1:10809'}
+# proxies={'http':'http://127.0.0.1:10809'}
+threads=30
+timeout=10
+result_encode_type='gb18030'
+
+def handler(signal_received, frame):
+    print('SIGINT or CTRL-C detected. Exiting gracefully')
+    exit(0)
+
+def get_urllist(file):
+    with open(file,'r') as target:
+        targets=target.readlines()
+        return targets
+
+def get_title(url):
+    if 'http' not in url:
+        url = 'http://'+url
+    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'}
+    try:
+        if use_proxy:
+            res = requests.get(url,headers=headers,proxies=proxies,timeout=timeout)
+        else:
+            res = requests.get(url,headers=headers,timeout=timeout)
+    except Exception as e:
+        print(e)
+        return 'Timeout'
+    if res.apparent_encoding != None:
+        try:
+            encode_type=res.apparent_encoding
+            response=res.content.decode(encode_type)
+        except:
+            print("#Warning# Can't decode string as 【%s】.Target URL is 【%s】." % (res.apparent_encoding,url))
+            response=res.text
+    else:
+        response=res.text
+    try:
+        if 'mp.weixin.qq.com' in url:
+            rule=r"var msg_title = '.*'"
+            title=re.search(r"'.*'",re.search(rule,response).group()).group().strip('\'')
+        else:
+            soup=BeautifulSoup(response,'html.parser')
+            if soup.title:
+                title=str(soup.title.string)
+            else :
+                title=''
+    except Exception as e:
+        print(e)
+        exit(0)
+    return title.strip('\r\n')
+
+def single_thread(url):
+    url=url.strip('\r\n')
+    if not url:
+        return
+    result='"'+url + '","' + str(get_title(url))+'"'
+    print(result)
+    with open('result.csv','a+',encoding=result_encode_type) as output:
+        output.write(result+'\n')
+
+if __name__ == '__main__':
+    if len(argv)!=2:
+        print('Usage:\n  python3 get-title.py [targetfile]')
+        exit()
+    target_file=argv[1]
+    signal(SIGINT, handler)
+    target=get_urllist(target_file)
+    pool = threadpool.ThreadPool(threads)
+    threading=threadpool.makeRequests(single_thread,target)
+    [pool.putRequest(req) for req in threading]
+    pool.wait()
+    
+```
+
+- 优化了输出方式，改为输出到CSV表格；
+- 修正了爬HTTPS会出现问题的BUG，这么明显的BUG一开始的时候居然没发现……
+- 修正了部分网站爬取时编码问题异常的BUG；
