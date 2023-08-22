@@ -1,119 +1,171 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>一个Get-Title的自我修养 | 忘返</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="0x00 前言最近要整理大量的网页资料，刚好完善一下以前写的get-title脚本。目标：获取所有URL对应网页的Title，并以友好的格式输出至文件。此脚本原来是渗透的时候搞网段用的，把扫出来的Web的title列举出来，从而对自己的目标有个大致的概念。但是早先的版本只能说是可以将就着用，往往输出的格式乱七八糟，刚好借着这次机会重写一下。也顺便将其从python2过渡到python3。 0x01">
-<meta property="og:type" content="article">
-<meta property="og:title" content="一个Get-Title的自我修养">
-<meta property="og:url" content="https://7mitu.github.io/2021/01/26/%E4%B8%80%E4%B8%AAGet-Title%E5%BC%95%E5%87%BA%E7%9A%84%E5%9D%91/index.html">
-<meta property="og:site_name" content="忘返">
-<meta property="og:description" content="0x00 前言最近要整理大量的网页资料，刚好完善一下以前写的get-title脚本。目标：获取所有URL对应网页的Title，并以友好的格式输出至文件。此脚本原来是渗透的时候搞网段用的，把扫出来的Web的title列举出来，从而对自己的目标有个大致的概念。但是早先的版本只能说是可以将就着用，往往输出的格式乱七八糟，刚好借着这次机会重写一下。也顺便将其从python2过渡到python3。 0x01">
-<meta property="og:locale">
-<meta property="article:published_time" content="2021-01-26T08:31:49.000Z">
-<meta property="article:modified_time" content="2022-12-08T02:29:47.722Z">
-<meta property="article:author" content="忘返">
-<meta property="article:tag" content="Python">
-<meta property="article:tag" content="爬虫">
-<meta property="article:tag" content="工具">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="忘返" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
-
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
-  
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">忘返</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">天涯游子，一梦黄粱</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Suche"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://7mitu.github.io"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main"><article id="post-一个Get-Title引出的坑" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/01/26/%E4%B8%80%E4%B8%AAGet-Title%E5%BC%95%E5%87%BA%E7%9A%84%E5%9D%91/" class="article-date">
-  <time class="dt-published" datetime="2021-01-26T08:31:49.000Z" itemprop="datePublished">2021-01-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      一个Get-Title的自我修养
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><p>最近要整理大量的网页资料，刚好完善一下以前写的get-title脚本。<br>目标：获取所有URL对应网页的Title，并以友好的格式输出至文件。<br>此脚本原来是渗透的时候搞网段用的，把扫出来的Web的title列举出来，从而对自己的目标有个大致的概念。但是早先的版本只能说是可以将就着用，往往输出的格式乱七八糟，刚好借着这次机会重写一下。也顺便将其从python2过渡到python3。</p>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="懒"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>一个Get-Title的自我修养 | 忘返</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 6.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">忘返</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">一个Get-Title的自我修养</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2021/01/26/%E4%B8%80%E4%B8%AAGet-Title%E5%BC%95%E5%87%BA%E7%9A%84%E5%9D%91/">2021-01-26</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><p>最近要整理大量的网页资料，刚好完善一下以前写的get-title脚本。<br>目标：获取所有URL对应网页的Title，并以友好的格式输出至文件。<br>此脚本原来是渗透的时候搞网段用的，把扫出来的Web的title列举出来，从而对自己的目标有个大致的概念。但是早先的版本只能说是可以将就着用，往往输出的格式乱七八糟，刚好借着这次机会重写一下。也顺便将其从python2过渡到python3。</p>
 <h1 id="0x01-版本对比"><a href="#0x01-版本对比" class="headerlink" title="0x01 版本对比"></a>0x01 版本对比</h1><p>早期版本：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</span><br><span class="line"><span class="keyword">from</span> Queue <span class="keyword">import</span> Queue</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> signal</span><br><span class="line"><span class="keyword">import</span> chardet</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getTitle</span>(<span class="params">line</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line"></span><br><span class="line">        line=line.strip()</span><br><span class="line">        re = requests.get(line, timeout=<span class="number">2</span>)</span><br><span class="line">        ret2.write(line + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span> line+<span class="string">&#x27;\t\t&#x27;</span>+<span class="built_in">str</span>(re.status_code)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> re.status_code==<span class="number">200</span>:</span><br><span class="line">            text=BeautifulSoup(re.content,<span class="string">&#x27;html.parser&#x27;</span>)</span><br><span class="line">            titles=text.find(<span class="string">&#x27;title&#x27;</span>)</span><br><span class="line">            title=<span class="built_in">str</span>(titles)</span><br><span class="line">            ret.write(line+<span class="string">&#x27;\t\t&#x27;</span>+title+<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            ret.write(line + <span class="string">&#x27;\t\t&#x27;</span> + <span class="string">&#x27;Error Code:&#x27;</span> + re.status_code + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> requests.exceptions.Timeout:</span><br><span class="line">        ret2.write(line + <span class="string">&#x27;\terror\n&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span> line+<span class="string">&#x27;\t\ttime out&#x27;</span></span><br><span class="line">        ret.write(line+<span class="string">&#x27;\t\t&#x27;</span>+ <span class="string">&#x27;Time out\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Worker</span>(<span class="title class_ inherited__">Thread</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, taskQueue</span>):</span><br><span class="line">        Thread.__init__(self)</span><br><span class="line">        self.setDaemon(<span class="literal">True</span>)</span><br><span class="line">        self.taskQueue = taskQueue</span><br><span class="line">        self.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="built_in">callable</span>, args, kwds = self.taskQueue.get(block=<span class="literal">False</span>)</span><br><span class="line">                <span class="built_in">callable</span>(*args, **kwds)</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ThreadPool</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.threads = []</span><br><span class="line">        self.taskQueue = Queue()</span><br><span class="line">        self.threadNum = num_thread</span><br><span class="line">        self.__create_taskqueue()</span><br><span class="line">        self.__create_threadpool(self.threadNum)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__create_taskqueue</span>(<span class="params">self</span>):</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;target.txt&quot;</span>, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">        lines = f.readlines()</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">            self.add_task(getTitle, line)</span><br><span class="line">        f.close()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__create_threadpool</span>(<span class="params">self, threadNum</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(threadNum):</span><br><span class="line">            thread = Worker(self.taskQueue)</span><br><span class="line">            self.threads.append(thread)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_task</span>(<span class="params">self, <span class="built_in">callable</span>, *args, **kwds</span>):</span><br><span class="line">        self.taskQueue.put((<span class="built_in">callable</span>, args, kwds))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">new_complete</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">            time.sleep(<span class="number">0.1</span>)</span><br><span class="line">            alive = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_thread):</span><br><span class="line">                alive = alive <span class="keyword">or</span> self.threads[i].isAlive()</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> alive:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handler</span>(<span class="params">signum, frame</span>):</span><br><span class="line">    <span class="keyword">global</span> is_exit</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;CTRL+C Is Pressed&quot;</span></span><br><span class="line">    sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_thread = <span class="number">20</span></span><br><span class="line">    signal.signal(signal.SIGINT, handler)</span><br><span class="line">    signal.signal(signal.SIGTERM, handler)</span><br><span class="line">    ret = <span class="built_in">open</span>(<span class="string">&quot;titles.txt&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line">    ret2=<span class="built_in">open</span>(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&#x27;w&#x27;</span>)</span><br><span class="line">    tp = ThreadPool()</span><br><span class="line">    tp.new_complete()</span><br><span class="line">    ret.close()</span><br><span class="line">    ret2.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="python">import requests
+from bs4 import BeautifulSoup
+from threading import Thread
+from Queue import Queue
+import sys
+import time
+import signal
+import chardet
 
+def getTitle(line):
+    try:
+
+        line=line.strip()
+        re = requests.get(line, timeout=2)
+        ret2.write(line + &#39;\n&#39;)
+        print line+&#39;\t\t&#39;+str(re.status_code)
+
+        if re.status_code==200:
+            text=BeautifulSoup(re.content,&#39;html.parser&#39;)
+            titles=text.find(&#39;title&#39;)
+            title=str(titles)
+            ret.write(line+&#39;\t\t&#39;+title+&#39;\n&#39;)
+        else:
+            ret.write(line + &#39;\t\t&#39; + &#39;Error Code:&#39; + re.status_code + &#39;\n&#39;)
+
+    except requests.exceptions.Timeout:
+        ret2.write(line + &#39;\terror\n&#39;)
+        print line+&#39;\t\ttime out&#39;
+        ret.write(line+&#39;\t\t&#39;+ &#39;Time out\n&#39;)
+
+class Worker(Thread):
+    def __init__(self, taskQueue):
+        Thread.__init__(self)
+        self.setDaemon(True)
+        self.taskQueue = taskQueue
+        self.start()
+
+    def run(self):
+        while 1:
+            try:
+                callable, args, kwds = self.taskQueue.get(block=False)
+                callable(*args, **kwds)
+            except:
+                break
+
+
+class ThreadPool:
+    def __init__(self):
+        self.threads = []
+        self.taskQueue = Queue()
+        self.threadNum = num_thread
+        self.__create_taskqueue()
+        self.__create_threadpool(self.threadNum)
+
+    def __create_taskqueue(self):
+        f = open(&quot;target.txt&quot;, &#39;r&#39;)
+        lines = f.readlines()
+        for line in lines:
+            self.add_task(getTitle, line)
+        f.close()
+
+    def __create_threadpool(self, threadNum):
+        for i in range(threadNum):
+            thread = Worker(self.taskQueue)
+            self.threads.append(thread)
+
+    def add_task(self, callable, *args, **kwds):
+        self.taskQueue.put((callable, args, kwds))
+
+    def new_complete(self):
+        while 1:
+            time.sleep(0.1)
+            alive = False
+            for i in range(num_thread):
+                alive = alive or self.threads[i].isAlive()
+            if not alive:
+                break
+
+
+def handler(signum, frame):
+    global is_exit
+    print &quot;CTRL+C Is Pressed&quot;
+    sys.exit(0)
+
+
+if __name__ == &#39;__main__&#39;:
+    num_thread = 20
+    signal.signal(signal.SIGINT, handler)
+    signal.signal(signal.SIGTERM, handler)
+    ret = open(&quot;titles.txt&quot;, &quot;w&quot;)
+    ret2=open(&quot;test.txt&quot;,&#39;w&#39;)
+    tp = ThreadPool()
+    tp.new_complete()
+    ret.close()
+    ret2.close()
+</code></pre>
 <p>重写极简版本：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">res=requests.get(url)</span><br><span class="line">soup=BeautifulSoup(res.text,<span class="string">&#x27;html.parser&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(soup.title.string)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="python">import requests
+from bs4 import BeautifulSoup
 
+res=requests.get(url)
+soup=BeautifulSoup(res.text,&#39;html.parser&#39;)
+print(soup.title.string)
+</code></pre>
 <p>最终版本：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> threadpool</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> signal <span class="keyword">import</span> signal, SIGINT</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> exit</span><br><span class="line"></span><br><span class="line">proxies=&#123;<span class="string">&#x27;http&#x27;</span>:<span class="string">&#x27;http://127.0.0.1:10809&#x27;</span>&#125;</span><br><span class="line">threads=<span class="number">30</span></span><br><span class="line">timeout=<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handler</span>(<span class="params">signal_received, frame</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;SIGINT or CTRL-C detected. Exiting gracefully&#x27;</span>)</span><br><span class="line">    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_urllist</span>(<span class="params">file</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file,<span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> target:</span><br><span class="line">        targets=target.readlines()</span><br><span class="line">        <span class="keyword">return</span> targets</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_title</span>(<span class="params">url</span>):</span><br><span class="line">    headers = &#123;<span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36&#x27;</span>&#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        res=requests.get(url,headers=headers,proxies=proxies,timeout=timeout)</span><br><span class="line">    <span class="keyword">except</span> :</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Timeout&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> res.apparent_encoding != <span class="literal">None</span>:</span><br><span class="line">        response=res.content.decode(res.apparent_encoding)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        response=res.text</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;mp.weixin.qq.com&#x27;</span> <span class="keyword">in</span> url:</span><br><span class="line">            rule=<span class="string">r&quot;var msg_title = &#x27;.*&#x27;&quot;</span></span><br><span class="line">            title=re.search(<span class="string">r&quot;&#x27;.*&#x27;&quot;</span>,re.search(rule,response).group()).group().strip(<span class="string">&#x27;\&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            soup=BeautifulSoup(response,<span class="string">&#x27;html.parser&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> soup.title:</span><br><span class="line">                title=<span class="built_in">str</span>(soup.title.string)</span><br><span class="line">            <span class="keyword">else</span> :</span><br><span class="line">                title=<span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">        exit(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> title</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">single_thread</span>(<span class="params">url</span>):</span><br><span class="line">    url=url.strip(<span class="string">&#x27;\r\n&#x27;</span>)</span><br><span class="line">    result=url + <span class="string">&#x27;\t&#x27;</span> + <span class="built_in">str</span>(get_title(url))</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;result.txt&#x27;</span>,<span class="string">&#x27;a+&#x27;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> output:</span><br><span class="line">        output.write(result+<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    signal(SIGINT, handler)</span><br><span class="line">    target=get_urllist(<span class="string">&#x27;target.txt&#x27;</span>)</span><br><span class="line">    pool = threadpool.ThreadPool(threads)</span><br><span class="line">    threading=threadpool.makeRequests(single_thread,target)</span><br><span class="line">    [pool.putRequest(req) <span class="keyword">for</span> req <span class="keyword">in</span> threading]</span><br><span class="line">    pool.wait()</span><br></pre></td></tr></table></figure>
+<pre><code class="python">import requests
+from bs4 import BeautifulSoup
+import threadpool
+import re
+from signal import signal, SIGINT
+from sys import exit
 
+proxies=&#123;&#39;http&#39;:&#39;http://127.0.0.1:10809&#39;&#125;
+threads=30
+timeout=3
+
+def handler(signal_received, frame):
+    print(&#39;SIGINT or CTRL-C detected. Exiting gracefully&#39;)
+    exit(0)
+
+def get_urllist(file):
+    with open(file,&#39;r&#39;) as target:
+        targets=target.readlines()
+        return targets
+
+def get_title(url):
+    headers = &#123;&#39;user-agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36&#39;&#125;
+    try:
+        res=requests.get(url,headers=headers,proxies=proxies,timeout=timeout)
+    except :
+        return &#39;Timeout&#39;
+    if res.apparent_encoding != None:
+        response=res.content.decode(res.apparent_encoding)
+    else:
+        response=res.text
+    try:
+        if &#39;mp.weixin.qq.com&#39; in url:
+            rule=r&quot;var msg_title = &#39;.*&#39;&quot;
+            title=re.search(r&quot;&#39;.*&#39;&quot;,re.search(rule,response).group()).group().strip(&#39;\&#39;&#39;)
+        else:
+            soup=BeautifulSoup(response,&#39;html.parser&#39;)
+            if soup.title:
+                title=str(soup.title.string)
+            else :
+                title=&#39;&#39;
+    except Exception as e:
+        print(e)
+        exit(0)
+    return title
+
+def single_thread(url):
+    url=url.strip(&#39;\r\n&#39;)
+    result=url + &#39;\t&#39; + str(get_title(url))
+    print(result)
+    with open(&#39;result.txt&#39;,&#39;a+&#39;,encoding=&#39;utf-8&#39;) as output:
+        output.write(result+&#39;\n&#39;)
+
+if __name__ == &#39;__main__&#39;:
+    signal(SIGINT, handler)
+    target=get_urllist(&#39;target.txt&#39;)
+    pool = threadpool.ThreadPool(threads)
+    threading=threadpool.makeRequests(single_thread,target)
+    [pool.putRequest(req) for req in threading]
+    pool.wait()
+</code></pre>
 <p>简而言之，早期的版本与当前版本区别如下：</p>
 <ul>
 <li>利用多线程的方式有所区别</li>
@@ -125,37 +177,61 @@
 </ul>
 <h1 id="0x02-探索历程"><a href="#0x02-探索历程" class="headerlink" title="0x02 探索历程"></a>0x02 探索历程</h1><p>早期的版本实际上是直接对其他大佬的代码做的修改，仅仅在使用习惯上做了一些调整，代码逻辑也不甚了解，于是一不做二不休，从零开始重写脚本。</p>
 <h2 id="坑1-微信公众号文章的Title"><a href="#坑1-微信公众号文章的Title" class="headerlink" title="坑1 微信公众号文章的Title"></a>坑1 微信公众号文章的Title</h2><p>最早用极简版测试的时候，发现所有的微信公众号都无法用bs4直接获取到title，于是乎瞅了一眼公众号的源码，title竟然是这个屌样子的……</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    …………</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> hd_head_img = <span class="string">&quot;http://xxxxxxxxxx/&quot;</span>||<span class="string">&quot;&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> ori_head_img_url = <span class="string">&quot;http://xxxxxxxxx/&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> msg_title = <span class="string">&#x27;这里是title&#x27;</span>.<span class="title function_">html</span>(<span class="literal">false</span>);</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> msg_desc = <span class="string">&quot;XXXXXXXXXX...&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> msg_cdn_url = <span class="string">&quot;http://XXXXXX/...&quot;</span>; </span></span><br><span class="line"><span class="language-javascript">    …………</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="html">&lt;script&gt;
+    …………
+    var hd_head_img = &quot;http://xxxxxxxxxx/&quot;||&quot;&quot;;
+    var ori_head_img_url = &quot;http://xxxxxxxxx/&quot;;
+    var msg_title = &#39;这里是title&#39;.html(false);
+    var msg_desc = &quot;XXXXXXXXXX...&quot;;
+    var msg_cdn_url = &quot;http://XXXXXX/...&quot;; 
+    …………
+&lt;/script&gt;
+</code></pre>
 <p>丧心病狂啊……这操作我没太看明白，防爬？</p>
 <p>想多了吧。</p>
 <p>直接正则一把梭：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">&#x27;mp.weixin.qq.com&#x27;</span> <span class="keyword">in</span> url:</span><br><span class="line">    rule=<span class="string">r&quot;var msg_title = &#x27;.*&#x27;&quot;</span></span><br><span class="line">    title=re.search(<span class="string">r&quot;&#x27;.*&#x27;&quot;</span>,re.search(rule,response).group()).group().strip(<span class="string">&#x27;\&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
+<pre><code class="python">if &#39;mp.weixin.qq.com&#39; in url:
+    rule=r&quot;var msg_title = &#39;.*&#39;&quot;
+    title=re.search(r&quot;&#39;.*&#39;&quot;,re.search(rule,response).group()).group().strip(&#39;\&#39;&#39;)
+</code></pre>
 <h2 id="坑2-没有Title"><a href="#坑2-没有Title" class="headerlink" title="坑2 没有Title"></a>坑2 没有Title</h2><p>有些链接是文件的下载链接，没有Title，于是引发bs4报错，于是引发脚本崩溃，这……</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">soup=BeautifulSoup(response,<span class="string">&#x27;html.parser&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> soup.title:</span><br><span class="line">    title=<span class="built_in">str</span>(soup.title.string)</span><br><span class="line"><span class="keyword">else</span> :</span><br><span class="line">    title=<span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="python">soup=BeautifulSoup(response,&#39;html.parser&#39;)
+if soup.title:
+    title=str(soup.title.string)
+else :
+    title=&#39;&#39;
+</code></pre>
 <h2 id="坑3-User-Agent被拦截"><a href="#坑3-User-Agent被拦截" class="headerlink" title="坑3 User-Agent被拦截"></a>坑3 User-Agent被拦截</h2><p>有的防护设备居然会丧心病狂的拦截requests的UA……</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">headers = &#123;<span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36&#x27;</span>&#125;</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    res=requests.get(url,headers=headers,proxies=proxies,timeout=timeout)</span><br><span class="line"><span class="keyword">except</span> :</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Timeout&#x27;</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="python">headers = &#123;&#39;user-agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36&#39;&#125;
+try:
+    res=requests.get(url,headers=headers,proxies=proxies,timeout=timeout)
+except :
+    return &#39;Timeout&#39;
+</code></pre>
 <h2 id="坑4-编码问题"><a href="#坑4-编码问题" class="headerlink" title="坑4 编码问题"></a>坑4 编码问题</h2><p>这其实是个挺头疼的问题，之前第一版的脚本就一直没有解决。<br>以前读取<code>response</code>的内容，一般是通过两个方式，<code>res.text()</code>或者<code>res.content()</code>。但是这样有一个很头疼的问题，就是每个网站的编码方式不一样，尤其中文网站，用<code>GBK</code>的和用<code>UTF-8</code>的网站几乎一样多。于是输出的时候就是各种乱七八糟的乱码，而一个文件又不可能同时有两种编码格式。<br>经过艰(qing)难(jiao)研(da)究(lao)，最终确定了两种解决方案：</p>
 <ol>
 <li>通过<code>chardet</code>确定编码格式，最终统一成同一种编码方式；</li>
 <li>读取网页<code>response</code>头中的编码格式，然后decode；</li>
 </ol>
 <p>最终我采用的是方案2：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response = res.content.decode(res.apparent_encoding)</span><br></pre></td></tr></table></figure>
-
+<pre><code class="python">response = res.content.decode(res.apparent_encoding)
+</code></pre>
 <p>这里又有一个小坑，有些网站的response头中不会返回编码格式……</p>
 <p>这类网站往往都是默认采用<code>UTF-8</code>格式编码，所以我们直接用<code>res.text</code>就可以了：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> res.apparent_encoding != <span class="literal">None</span>:</span><br><span class="line">    response=res.content.decode(res.apparent_encoding)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    response=res.text</span><br></pre></td></tr></table></figure>
-
+<pre><code class="python">if res.apparent_encoding != None:
+    response=res.content.decode(res.apparent_encoding)
+else:
+    response=res.text
+</code></pre>
 <h1 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h1><p>这次脚本的编写还算比较顺利（毕竟是个很简单的东西），从开始到调试、完工也不过花了两个多小时，还不如写这篇文章花的时间多，大部分时间都花在了滤坑上面。但是其实还是可以分析出一些东西，一是本人确实久疏战阵，不太熟练了；二来，即便比早先的版本改进了一些，但距离作为一个成熟的工具，仍有许多可以改进的地方。</p>
 <h2 id="仍然存在的缺陷"><a href="#仍然存在的缺陷" class="headerlink" title="仍然存在的缺陷"></a>仍然存在的缺陷</h2><ol>
 <li>遭遇某些编码格式的网站时，仍然会报错（如<code>cp1254</code>等）；</li>
 </ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">File <span class="string">&quot;.\get-title.py&quot;</span>, line <span class="number">28</span>, <span class="keyword">in</span> get_title</span><br><span class="line">  response=res.content.decode(res.apparent_encoding)</span><br><span class="line">File <span class="string">&quot;C:\Environment\Python38\lib\encodings\cp1254.py&quot;</span>, line <span class="number">15</span>, <span class="keyword">in</span> decode</span><br><span class="line">  <span class="keyword">return</span> codecs.charmap_decode(<span class="built_in">input</span>,errors,decoding_table)</span><br></pre></td></tr></table></figure>
-
+<pre><code class="python">  File &quot;.\get-title.py&quot;, line 28, in get_title
+    response=res.content.decode(res.apparent_encoding)
+  File &quot;C:\Environment\Python38\lib\encodings\cp1254.py&quot;, line 15, in decode
+    return codecs.charmap_decode(input,errors,decoding_table)
+</code></pre>
 <ol start="2">
 <li>对于一些比较常见的反爬虫手段，无能为力（爬到的title是<code>Just a moment...</code>，说明在自动验证是否真人访问）</li>
 </ol>
@@ -164,158 +240,129 @@
 <li>更加友好的结果呈现，可输出至Excel表格中，最好舍弃csv采用xlsx，因为获取的title千奇百怪，可能破坏csv的格式；</li>
 <li>自动识别一些常见的中间件，如Weblogic等等；</li>
 </ol>
-<h1 id="0x04-2021-2-26更新"><a href="#0x04-2021-2-26更新" class="headerlink" title="0x04 2021.2.26更新"></a>0x04 2021.2.26更新</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> threadpool</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> signal <span class="keyword">import</span> signal, SIGINT</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> exit</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> argv</span><br><span class="line"></span><br><span class="line">use_proxy=<span class="literal">True</span></span><br><span class="line">proxies=&#123;<span class="string">&#x27;http&#x27;</span>:<span class="string">&#x27;http://127.0.0.1:10809&#x27;</span>,<span class="string">&#x27;https&#x27;</span>:<span class="string">&#x27;http://127.0.0.1:10809&#x27;</span>&#125;</span><br><span class="line"><span class="comment"># proxies=&#123;&#x27;http&#x27;:&#x27;http://127.0.0.1:10809&#x27;&#125;</span></span><br><span class="line">threads=<span class="number">30</span></span><br><span class="line">timeout=<span class="number">10</span></span><br><span class="line">result_encode_type=<span class="string">&#x27;gb18030&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handler</span>(<span class="params">signal_received, frame</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;SIGINT or CTRL-C detected. Exiting gracefully&#x27;</span>)</span><br><span class="line">    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_urllist</span>(<span class="params">file</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file,<span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> target:</span><br><span class="line">        targets=target.readlines()</span><br><span class="line">        <span class="keyword">return</span> targets</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_title</span>(<span class="params">url</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;http&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> url:</span><br><span class="line">        url = <span class="string">&#x27;http://&#x27;</span>+url</span><br><span class="line">    headers = &#123;<span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36&#x27;</span>&#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> use_proxy:</span><br><span class="line">            res = requests.get(url,headers=headers,proxies=proxies,timeout=timeout)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            res = requests.get(url,headers=headers,timeout=timeout)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Timeout&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> res.apparent_encoding != <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            encode_type=res.apparent_encoding</span><br><span class="line">            response=res.content.decode(encode_type)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;#Warning# Can&#x27;t decode string as 【%s】.Target URL is 【%s】.&quot;</span> % (res.apparent_encoding,url))</span><br><span class="line">            response=res.text</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        response=res.text</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;mp.weixin.qq.com&#x27;</span> <span class="keyword">in</span> url:</span><br><span class="line">            rule=<span class="string">r&quot;var msg_title = &#x27;.*&#x27;&quot;</span></span><br><span class="line">            title=re.search(<span class="string">r&quot;&#x27;.*&#x27;&quot;</span>,re.search(rule,response).group()).group().strip(<span class="string">&#x27;\&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            soup=BeautifulSoup(response,<span class="string">&#x27;html.parser&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> soup.title:</span><br><span class="line">                title=<span class="built_in">str</span>(soup.title.string)</span><br><span class="line">            <span class="keyword">else</span> :</span><br><span class="line">                title=<span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">        exit(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> title.strip(<span class="string">&#x27;\r\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">single_thread</span>(<span class="params">url</span>):</span><br><span class="line">    url=url.strip(<span class="string">&#x27;\r\n&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> url:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    result=<span class="string">&#x27;&quot;&#x27;</span>+url + <span class="string">&#x27;&quot;,&quot;&#x27;</span> + <span class="built_in">str</span>(get_title(url))+<span class="string">&#x27;&quot;&#x27;</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;result.csv&#x27;</span>,<span class="string">&#x27;a+&#x27;</span>,encoding=result_encode_type) <span class="keyword">as</span> output:</span><br><span class="line">        output.write(result+<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(argv)!=<span class="number">2</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Usage:\n  python3 get-title.py [targetfile]&#x27;</span>)</span><br><span class="line">        exit()</span><br><span class="line">    target_file=argv[<span class="number">1</span>]</span><br><span class="line">    signal(SIGINT, handler)</span><br><span class="line">    target=get_urllist(target_file)</span><br><span class="line">    pool = threadpool.ThreadPool(threads)</span><br><span class="line">    threading=threadpool.makeRequests(single_thread,target)</span><br><span class="line">    [pool.putRequest(req) <span class="keyword">for</span> req <span class="keyword">in</span> threading]</span><br><span class="line">    pool.wait()</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<h1 id="0x04-2021-2-26更新"><a href="#0x04-2021-2-26更新" class="headerlink" title="0x04 2021.2.26更新"></a>0x04 2021.2.26更新</h1><pre><code class="python">import requests
+from bs4 import BeautifulSoup
+import threadpool
+import re
+from signal import signal, SIGINT
+from sys import exit
+from sys import argv
 
+use_proxy=True
+proxies=&#123;&#39;http&#39;:&#39;http://127.0.0.1:10809&#39;,&#39;https&#39;:&#39;http://127.0.0.1:10809&#39;&#125;
+# proxies=&#123;&#39;http&#39;:&#39;http://127.0.0.1:10809&#39;&#125;
+threads=30
+timeout=10
+result_encode_type=&#39;gb18030&#39;
+
+def handler(signal_received, frame):
+    print(&#39;SIGINT or CTRL-C detected. Exiting gracefully&#39;)
+    exit(0)
+
+def get_urllist(file):
+    with open(file,&#39;r&#39;) as target:
+        targets=target.readlines()
+        return targets
+
+def get_title(url):
+    if &#39;http&#39; not in url:
+        url = &#39;http://&#39;+url
+    headers = &#123;&#39;user-agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36&#39;&#125;
+    try:
+        if use_proxy:
+            res = requests.get(url,headers=headers,proxies=proxies,timeout=timeout)
+        else:
+            res = requests.get(url,headers=headers,timeout=timeout)
+    except Exception as e:
+        print(e)
+        return &#39;Timeout&#39;
+    if res.apparent_encoding != None:
+        try:
+            encode_type=res.apparent_encoding
+            response=res.content.decode(encode_type)
+        except:
+            print(&quot;#Warning# Can&#39;t decode string as 【%s】.Target URL is 【%s】.&quot; % (res.apparent_encoding,url))
+            response=res.text
+    else:
+        response=res.text
+    try:
+        if &#39;mp.weixin.qq.com&#39; in url:
+            rule=r&quot;var msg_title = &#39;.*&#39;&quot;
+            title=re.search(r&quot;&#39;.*&#39;&quot;,re.search(rule,response).group()).group().strip(&#39;\&#39;&#39;)
+        else:
+            soup=BeautifulSoup(response,&#39;html.parser&#39;)
+            if soup.title:
+                title=str(soup.title.string)
+            else :
+                title=&#39;&#39;
+    except Exception as e:
+        print(e)
+        exit(0)
+    return title.strip(&#39;\r\n&#39;)
+
+def single_thread(url):
+    url=url.strip(&#39;\r\n&#39;)
+    if not url:
+        return
+    result=&#39;&quot;&#39;+url + &#39;&quot;,&quot;&#39; + str(get_title(url))+&#39;&quot;&#39;
+    print(result)
+    with open(&#39;result.csv&#39;,&#39;a+&#39;,encoding=result_encode_type) as output:
+        output.write(result+&#39;\n&#39;)
+
+if __name__ == &#39;__main__&#39;:
+    if len(argv)!=2:
+        print(&#39;Usage:\n  python3 get-title.py [targetfile]&#39;)
+        exit()
+    target_file=argv[1]
+    signal(SIGINT, handler)
+    target=get_urllist(target_file)
+    pool = threadpool.ThreadPool(threads)
+    threading=threadpool.makeRequests(single_thread,target)
+    [pool.putRequest(req) for req in threading]
+    pool.wait()
+    
+</code></pre>
 <ul>
 <li>优化了输出方式，改为输出到CSV表格；</li>
 <li>修正了爬HTTPS会出现问题的BUG，这么明显的BUG一开始的时候居然没发现……</li>
 <li>修正了部分网站爬取时编码问题异常的BUG；</li>
 </ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://7mitu.github.io/2021/01/26/%E4%B8%80%E4%B8%AAGet-Title%E5%BC%95%E5%87%BA%E7%9A%84%E5%9D%91/" data-id="clllsxsnm0006jsy512aha595" data-title="一个Get-Title的自我修养" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2021/04/09/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6-%E6%96%87%E4%BB%B6%E5%A4%B9%E6%97%B6%E9%97%B4%E5%B1%9E%E6%80%A7/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
-      <div class="article-nav-title">
-        
-          利用Powershell修改文件/文件夹时间属性
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2021/01/01/2020-2021/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
-      <div class="article-nav-title">2020 - 2021</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CheckList/" rel="tag">CheckList</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HackTheBox/" rel="tag">HackTheBox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shellcode/" rel="tag">Shellcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powershell/" rel="tag">powershell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%8D%E6%9D%80/" rel="tag">免杀</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E6%B8%97%E9%80%8F/" rel="tag">后渗透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%8C%96/" rel="tag">持久化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AC%BA%E9%AA%97/" rel="tag">欺骗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" rel="tag">渗透测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/CheckList/" style="font-size: 15px;">CheckList</a> <a href="/tags/HackTheBox/" style="font-size: 10px;">HackTheBox</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Shellcode/" style="font-size: 20px;">Shellcode</a> <a href="/tags/powershell/" style="font-size: 10px;">powershell</a> <a href="/tags/%E5%85%8D%E6%9D%80/" style="font-size: 10px;">免杀</a> <a href="/tags/%E5%90%8E%E6%B8%97%E9%80%8F/" style="font-size: 15px;">后渗透</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">基础</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%8C%96/" style="font-size: 10px;">持久化</a> <a href="/tags/%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">欺骗</a> <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">渗透测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2023/08/22/HackTheBox_PhoneBook_WriteUP/">HackTheBox PhoneBook WriteUP</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/28/%E5%85%B3%E4%BA%8ELinux%E4%B8%8B%E5%8F%8D%E5%BC%B9Shell%E5%91%BD%E4%BB%A4%E7%9A%84%E8%A7%A3%E9%87%8A/">关于Linux下反弹Shell命令的解释</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/09/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6-%E6%96%87%E4%BB%B6%E5%A4%B9%E6%97%B6%E9%97%B4%E5%B1%9E%E6%80%A7/">利用Powershell修改文件/文件夹时间属性</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/26/%E4%B8%80%E4%B8%AAGet-Title%E5%BC%95%E5%87%BA%E7%9A%84%E5%9D%91/">一个Get-Title的自我修养</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/01/2020-2021/">2020 - 2021</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2023 忘返<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">忘返</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2021/01/26/%E4%B8%80%E4%B8%AAGet-Title%E5%BC%95%E5%87%BA%E7%9A%84%E5%9D%91/">https://7mitu.github.io/2021/01/26/一个Get-Title引出的坑/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://7mitu.github.io">忘返的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/Python/">Python</a><a href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a><a href="/tags/%E5%B7%A5%E5%85%B7/">工具</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x00-%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">0x00 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-%E7%89%88%E6%9C%AC%E5%AF%B9%E6%AF%94"><span class="toc-number">2.</span> <span class="toc-text">0x01 版本对比</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-%E6%8E%A2%E7%B4%A2%E5%8E%86%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">0x02 探索历程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%911-%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E6%96%87%E7%AB%A0%E7%9A%84Title"><span class="toc-number">3.1.</span> <span class="toc-text">坑1 微信公众号文章的Title</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%912-%E6%B2%A1%E6%9C%89Title"><span class="toc-number">3.2.</span> <span class="toc-text">坑2 没有Title</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%913-User-Agent%E8%A2%AB%E6%8B%A6%E6%88%AA"><span class="toc-number">3.3.</span> <span class="toc-text">坑3 User-Agent被拦截</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%914-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98"><span class="toc-number">3.4.</span> <span class="toc-text">坑4 编码问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">0x03 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8D%E7%84%B6%E5%AD%98%E5%9C%A8%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="toc-number">4.1.</span> <span class="toc-text">仍然存在的缺陷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E4%BB%A5%E6%94%B9%E8%BF%9B%E7%9A%84%E6%96%B9%E5%90%91"><span class="toc-number">4.2.</span> <span class="toc-text">可以改进的方向</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-2021-2-26%E6%9B%B4%E6%96%B0"><span class="toc-number">5.</span> <span class="toc-text">0x04 2021.2.26更新</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2021/04/09/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6-%E6%96%87%E4%BB%B6%E5%A4%B9%E6%97%B6%E9%97%B4%E5%B1%9E%E6%80%A7/">&lt; 利用Powershell修改文件/文件夹时间属性</a><a class="next" href="/2021/01/01/2020-2021/">2020 - 2021 &gt;</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2023 <a href="/." rel="nofollow">忘返</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

