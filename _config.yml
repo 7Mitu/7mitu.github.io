@@ -5,7 +5,7 @@
 # Site
 title: 忘返
 subtitle: '天涯游子，一梦黄粱'
-description: '我的安全之路'
+description: '懒'
 keywords:
 author: 忘返
 language: zh
@@ -47,8 +47,8 @@ marked:
 relative_link: false
 future: true
 highlight:
-  enable: true
-  line_number: true
+  enable: false
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
@@ -101,7 +101,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: snark
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
