@@ -25,4 +25,32 @@ let's join forces and save the bees today! 🐝
 
 ![routers.py](image-2.png)
 
-`DockerFile`显示
+`DockerFile`中写入了安装`Pillow+ghostscript`的命令：
+
+![dockerfile](image-3.png)
+
+关于这两个组件的介绍，我们可以问一下神奇的ChatGPT：
+
+![ChatGPT](image-4.png)
+
+`ghostscript-9.23`存在远程命令执行漏洞，漏洞详情参考：[Python PIL/Pillow Remote Shell Command Execution via Ghostscript CVE-2018-16509](https://github.com/farisv/PIL-RCE-Ghostscript-CVE-2018-16509)
+
+对代码进行分析后可以发现，当前的上传功能完美符合漏洞的利用条件。那么接下来，只需要找到`flag`文件的绝对路径就可以了。这很好找：
+
+![flag_path](image-5.png)
+
+路径是`/app/flag`
+
+## 解题
+
+读取`/app/flag`内容并写入到可访问的静态路径下。
+
+![poc](image-6.png)
+
+然后直接访问写入的文件即可。
+
+![flag](image-7.png)
+
+# 后记
+
+~~开始的时候找错了绝对路径，还以为思路错了。~~
