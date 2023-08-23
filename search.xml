@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>HackTheBox petpet rcbee WriteUP</title>
+      <link href="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/"/>
+      <url>/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/</url>
+      
+        <content type="html"><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><blockquote><p>Bees are comfy 🍯<br>bees are great 🌟🌟🌟<br>this is a petpet generator 👋<br>let’s join forces and save the bees today! 🐝</p></blockquote><p><img src="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/image.png" alt="Bee"></p><p><img src="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/image-1.png" alt="Web"></p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p><code>flag</code>文件的位置已经给出了，那么目标很明确，就是想办法读取到这个文件的内容。</p><p>代码中只有一个上传功能，python的站点通过上传木马GetShell显然是比较罕见的操作，那么更有可能的解题思路是对组件的漏洞进行利用。</p><p><img src="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/image-2.png" alt="routers.py"></p><p><code>DockerFile</code>中写入了安装<code>Pillow+ghostscript</code>的命令：</p><p><img src="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/image-3.png" alt="dockerfile"></p><p>关于这两个组件的介绍，我们可以问一下神奇的ChatGPT：</p><p><img src="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/image-4.png" alt="ChatGPT"></p><p><code>ghostscript-9.23</code>存在远程命令执行漏洞，漏洞详情参考：<a href="https://github.com/farisv/PIL-RCE-Ghostscript-CVE-2018-16509">Python PIL&#x2F;Pillow Remote Shell Command Execution via Ghostscript CVE-2018-16509</a></p><p>对代码进行分析后可以发现，当前的上传功能完美符合漏洞的利用条件。那么接下来，只需要找到<code>flag</code>文件的绝对路径就可以了。这很好找：</p><p><img src="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/image-5.png" alt="flag_path"></p><p>路径是<code>/app/flag</code></p><h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>读取<code>/app/flag</code>内容并写入到可访问的静态路径下。</p><p><img src="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/image-6.png" alt="poc"></p><p>然后直接访问写入的文件即可。</p><p><img src="/2023/08/23/HackTheBox-petpet-rcbee-WriteUP/image-7.png" alt="flag"></p><h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p><del>开始的时候找错了绝对路径，还以为思路错了。</del></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> HackTheBox </tag>
+            
+            <tag> Web </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HackTheBox Toxic WriteUP</title>
       <link href="/2023/08/23/HackTheBox-Toxic-WriteUP/"/>
       <url>/2023/08/23/HackTheBox-Toxic-WriteUP/</url>
