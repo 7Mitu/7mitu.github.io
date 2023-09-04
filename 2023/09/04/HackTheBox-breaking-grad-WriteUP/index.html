@@ -5,17 +5,17 @@
 <blockquote>
 <p>(您和您的好友在一本著名出版物的脚注中更正了物理老师关于高激发大质量弦态衰变的论文中的数学计算。 他只是出于恶意而没通过你的论文，因为他在大学的研究研讨会上出丑了。 现在你无法毕业，除非你能做点什么……)</p>
 </blockquote>
-<p><img src="/image.png" alt="Web"></p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image.png" alt="Web"></p>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>Web页面很简单，目标似乎是通过某种方式，让我们的主角顺利毕业。分析代码我们可以看到，毕业的条件有两个：</p>
 <ol>
 <li>Paper评分大于等于10；</li>
 <li>名字不是Baker或者Purvis；</li>
 </ol>
-<p><img src="/image-1.png" alt="pass"><br>得罪教授果然没什么好下场。</p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image-1.png" alt="pass"><br>得罪教授果然没什么好下场。</p>
 <p>玩笑结束，我们来分析代码。可交互的路径就两个：<code>/debug/:action</code>和<code>/api/calculate</code></p>
-<p><img src="/image-2.png" alt="url"></p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image-2.png" alt="url"></p>
 <p>通过跟踪参数的处理过程，我们大概可以锁定有问题的代码在<code>challenge\helpers\ObjectHelper.js</code>中（凭直觉）：</p>
-<p><img src="/image-3.png" alt="oh"></p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image-3.png" alt="oh"></p>
 <p>坦白讲我对NodeJS一窍不通，所以看不出这段代码有什么问题，所以让我们问问万能的ChatGPT吧。</p>
 <p>以下是ChatGPT的回答：</p>
 <hr>
@@ -65,14 +65,14 @@
 <p>很好，ChatGPT说这段代码采取了某些方式防止“原型污染”，所谓此地无银三百两，这个题目八成是要搞原型污染了。<del>（脑补费翔：她明明是祥Ray！）</del></p>
 <p>查阅若干资料之后，对NodeJS原型链污染漏洞大概有了个了解，类比一下就是，虽然龙生九子各有不同，但是如果我们通过龙的某个子嗣比如貔貅，改变了龙的某个属性，那么它的九个崽儿就都会继承这个属性（其实不恰当，实际上是调用的时候如果当前对象没有这个参数，就会向它的父对象搜索）。</p>
 <p>题目中过滤了关键字<code>&#39;__proto__&#39;</code>，但是通过<code>constructor.prototype</code>，我们仍然可以实现原型链污染。接下来找到一个利用点，也就是能够执行系统命令的函数就可以了，这里我们选择<code>DebugHelper.js</code>中的fork函数。</p>
-<p><img src="/image-4.png" alt="fork"></p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image-4.png" alt="fork"></p>
 <h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>构造Payload，获取Flag文件名（因为根据DockerFile，Flag文件名是随机的字符串）：</p>
-<p><img src="/image-5.png" alt="calc"></p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image-5.png" alt="calc"></p>
 <p>然后访问<code>/debug/version</code>执行poc：</p>
-<p><img src="/image-6.png" alt="ls"></p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image-6.png" alt="ls"></p>
 <p>最后读文件的内容就好了：</p>
-<p><img src="/image-7.png" alt="flag"></p>
-<p><img src="/image-8.png" alt="flag"></p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image-7.png" alt="flag"></p>
+<p><img src="/2023/09/04/HackTheBox-breaking-grad-WriteUP/image-8.png" alt="flag"></p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p><del>做HTB真是被迫从零开始学习NodeJS</del></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://wiki.wgpsec.org/knowledge/ctf/js-prototype-chain-pollution.html">nodejs原型链污染 #</a></li>
