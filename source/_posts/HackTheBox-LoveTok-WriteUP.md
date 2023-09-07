@@ -4,6 +4,8 @@ date: 2023-08-22 14:49:44
 tags:
 - HackTheBox
 - Web
+- 代码注入
+- Bypass
 ---
 
 ## 题目

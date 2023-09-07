@@ -4,6 +4,7 @@ date: 2023-08-22 09:15:09
 tags: 
 - HackTheBox
 - Web
+- 暴力破解
 ---
 
 ## 题目

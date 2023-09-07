@@ -4,6 +4,8 @@ date: 2023-08-23 09:39:14
 tags:
 - HackTheBox
 - Web
+- PHP反序列化
+- 文件包含
 ---
 
 ## 题目

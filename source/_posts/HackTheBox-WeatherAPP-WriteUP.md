@@ -4,6 +4,10 @@ date: 2023-08-22 18:08:00
 tags:
 - HackTheBox
 - Web
+- SQL注入
+- SSRF
+- 漏洞利用
+- HTTP Request拆分漏洞
 ---
 
 
