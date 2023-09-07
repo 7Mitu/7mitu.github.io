@@ -9,17 +9,7 @@
 <p><img src="/2023/09/07/HackTheBox-TwoDots-horror-WriteUP/image-1.png" alt="flag"></p>
 <p>结合函数<code>purgeData(db)</code>，bot会主动访问网站的页面，那么我们最终大概率需要通过XSS来获取bot的cookie。</p>
 <p>那么，我们来看<code>/review</code>的模板，关键代码如下：</p>
-<pre><code class="HTML">&lt;div class=&quot;main-area&quot;&gt;
-    &#123;% for post in feed %&#125;
-    <div class="nes-container is-post with-title">
-        <p class="title"><span class="title1">&#123;&#123; post.author &#125;&#125;</span><span class="title1">&#123;&#123; post.created_at &#125;&#125;</span></p>
-        <p>&#123;&#123; post.content|safe &#125;&#125;</p>
-    </div>
-    <button class="nes-btn is-primary">Approve</button> <button class="nes-btn is-error">Delete</button><br />
-    <br />
-    &#123;% endfor %&#125;
-&lt;/div&gt;
-</code></pre>
+<p><img src="/2023/09/07/HackTheBox-TwoDots-horror-WriteUP/image9.png" alt="safe"></p>
 <blockquote>
 <p><strong>safe</strong> 过滤器通常在各种模板引擎中用于标记一个字符串为”安全的”，这意味着该字符串不应该被转义。 ——ChatGPT</p>
 </blockquote>
