@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>HackTheBox Obscure WriteUP</title>
+      <link href="/2023/09/12/HackTheBox-Obscure-WriteUP/"/>
+      <url>/2023/09/12/HackTheBox-Obscure-WriteUP/</url>
+      
+        <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote><p>An attacker has found a vulnerability in our web server that allows arbitrary PHP file upload in our Apache server. Suchlike, the hacker has uploaded a what seems to be like an obfuscated shell (support.php). We monitor our network 24&#x2F;7 and generate logs from tcpdump (we provided the log file for the period of two minutes before we terminated the HTTP service for investigation), however, we need your help in analyzing and identifying commands the attacker wrote to understand what was compromised.</p></blockquote><p>翻译：</p><blockquote><p>攻击者在我们的 Web 服务器中发现了一个漏洞，该漏洞允许在我们的 Apache 服务器中上传任意 PHP 文件。 例如，黑客上传了一个看起来像是混淆的 shell (support.php)。 我们24&#x2F;7监控我们的网络并从tcpdump生成日志（我们在终止HTTP服务进行调查之前提供了两分钟的日志文件），但是，我们需要您的帮助来分析和识别攻击者编写的命令以理解 什么受到了损害。</p></blockquote><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image.png" alt="challenge"></p><p>题目给了一个PHP的WebShell文件，和一段流量。</p><h2 id="思路-解题"><a href="#思路-解题" class="headerlink" title="思路 &amp; 解题"></a>思路 &amp; 解题</h2><h3 id="WebShell分析"><a href="#WebShell分析" class="headerlink" title="WebShell分析"></a>WebShell分析</h3><p>首先看题目给的WebShell，很明显被混淆过了，但是是很简单的混淆：</p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-1.png" alt="WebShell"></p><p>大体逻辑是，将若干字符串拼接并删除掉字符串中的干扰字符（第8行代码），然后作为一个新函数执行。那么，我们只需要<code>echo $u;</code>，就可以得到真实的代码：</p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-2.png" alt="edited"></p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-3.png" alt="realcode"></p><p>随便找个在线网站优化一下格式：</p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-4.png" alt="beautifier"></p><p>这里可以看到代码的基本逻辑：定义了一个<code>xor</code>加密的函数，将传入的数据进行<code>xor</code>+<code>base64</code>+<code>gzuncompress</code>三层处理，然后执行处理后的代码。</p><p>之后我们只需要从流量中找到攻击者的攻击流量，然后还原攻击者执行的代码，即可判断出攻击者的行为。这里我们先稍稍改动一下代码，直接把解密后的代码echo出来，然后把改动后的代码上传到我们自己的PHP服务器上。改动后的代码如下：</p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-5.png" alt="poc"></p><p>接下来我们看流量。</p><h3 id="流量分析"><a href="#流量分析" class="headerlink" title="流量分析"></a>流量分析</h3><p>既然知道了WebShell的文件名，那么用<code>http.request.uri contains &quot;support.php&quot;</code>可以很轻松的筛选出攻击者的攻击记录：</p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-6.png" alt="1"></p><p>接下来，我们只需要重发攻击者的攻击流量到我们自己的服务器上，就可以看到攻击者的操作记录。在攻击者的最后一次操作记录中，我们发现攻击者拷贝走了本地的Keepass密码数据库：</p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-7.png" alt="2"></p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-8.png" alt="3"></p><p>因为加解密流程都是一样的，那么我们把攻击者获取的Response数据作为Request包的数据流发送，就可以获得Keepass数据库文件的base64编码：</p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-9.png" alt="keepass_base64"></p><p>使用以下命令可以还原出文件本体：</p><pre><code class="bash">cat base64.txt |base64 -d &gt; pwdb.kdbx</code></pre><h3 id="破解Keepass数据库"><a href="#破解Keepass数据库" class="headerlink" title="破解Keepass数据库"></a>破解Keepass数据库</h3><p>使用john The Ripper提取hash：</p><pre><code class="bash">keepass2john pwdb.kdbx &gt;hash.txt</code></pre><p>然后破解：</p><p><img src="/2023/09/12/HackTheBox-Obscure-WriteUP/image-10.png" alt="crack"></p><p>最后打开Keepass数据库获得Flag即可（Keepass不允许截图，就不截了）。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>不难，但是挺有意思的一道题，需要的技能没有那么深，但是考点还挺杂的。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> HackTheBox </tag>
+            
+            <tag> Forensics </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HackTheBox BabyEncryption WriteUp</title>
       <link href="/2023/09/11/HackTheBox-BabyEncryption-WriteUp/"/>
       <url>/2023/09/11/HackTheBox-BabyEncryption-WriteUp/</url>
@@ -187,9 +208,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> 漏洞利用 </tag>
-            
             <tag> SSRF </tag>
+            
+            <tag> 漏洞利用 </tag>
             
             <tag> HTTP Request拆分漏洞 </tag>
             
