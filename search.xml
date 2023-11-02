@@ -4,6 +4,29 @@
   
     
     <entry>
+      <title>记一次逆向还原AES加密的DB-PASSWORD</title>
+      <link href="/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/"/>
+      <url>/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在某次已授权的渗透行动中，拿到了某机器的IIS权限。翻看进程的过程中发现了某Agent在以高权限运行，遂对其进行分析，发现配置文件中包含AES加密的SQL Server数据库密码，遂试图对其进行解密。</p><p><img src="/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/image.png" alt="Alt text"></p><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>此Agent应用由Java编写，将其Jar包逆向后可看到其AES密钥的生成过程，即：取各种目录、版本、系统信息拼接后进行<code>SHA-256</code>加密，取其前16位作为密钥。</p><p><img src="/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/image-1.png" alt="Alt text"></p><p><img src="/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/image-2.png" alt="Alt text"></p><p>原计划是打算提取系统信息自行拼接并还原出密钥，但中间可能由于字符编码或各种其他的原因未能实现，遂作罢。</p><p>继续分析Java代码，发现代码中存在直接获取数据库密码的函数：</p><p><img src="/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/image-3.png" alt="Alt text"></p><p>那么，只需要分析此方法的调用链，编写对应的Java应用并在应用目录下执行，理论上即可获得明文的数据库密码。</p><p>此方法所在的类为<code>AgntConfig</code>，通过搜索找到此类在<code>class CfgMngr</code>的<code>loadConfig()</code>方法中生成了实例，并赋值给成员变量<code>config</code>：</p><p><img src="/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/image-4.png" alt="Alt text"></p><p>至此，调用链分析完成。</p><h2 id="PWN"><a href="#PWN" class="headerlink" title="PWN"></a>PWN</h2><p>编写Payload，这部分不会的可以问ChatGPT：</p><pre><code class="java">import agnt.cfg.*;public class pp &#123;    public static void main(String[] args) &#123;        CfgMngr cm = CfgMngr.getInstance();        cm.loadConfig();        String dbPassword = cm.getConfig().getDbPasswd();        System.out.println(&quot;Database Password: &quot; + dbPassword);    &#125;&#125;</code></pre><p>编译，这里需要注意编译时的Java版本要和目标机器的Java版本兼容：</p><pre><code class="cmd">javac -cp &quot;.;./lib/mcsm.jar&quot; pp.java</code></pre><p>应用的目录下有现成的bat批处理脚本，稍加修改执行我们的代码：</p><p><img src="/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/image-5.png" alt="Alt text"></p><p>将<code>pp.bat</code>和<code>pp.class</code>上传到应用程序的目录下，执行<code>pp.bat</code>，成功获得明文的数据库密码：</p><p><img src="/2023/11/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%80%86%E5%90%91%E8%BF%98%E5%8E%9FAES%E5%8A%A0%E5%AF%86%E7%9A%84DB-PASSWORD/image-6.png" alt="pwn"></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Java逆向 </tag>
+            
+            <tag> AES </tag>
+            
+            <tag> 后渗透 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HackTheBox Manager WriteUP</title>
       <link href="/2023/10/30/HackTheBox-Manager-WriteUP/"/>
       <url>/2023/10/30/HackTheBox-Manager-WriteUP/</url>
@@ -457,9 +480,9 @@
       
         <tags>
             
-            <tag> Shellcode </tag>
-            
             <tag> 后渗透 </tag>
+            
+            <tag> Shellcode </tag>
             
         </tags>
       
@@ -478,9 +501,9 @@
       
         <tags>
             
-            <tag> Shellcode </tag>
-            
             <tag> 后渗透 </tag>
+            
+            <tag> Shellcode </tag>
             
             <tag> 免杀 </tag>
             
